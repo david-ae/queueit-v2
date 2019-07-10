@@ -1,0 +1,35 @@
+<alert></alert>
+<div class="adminx-container d-flex justify-content-center align-items-center">
+        <ngx-spinner 
+        bdOpacity = 0.9
+        bdColor = "rgba(182,217,216,0.42)"
+        size = "medium"
+        color = "#48567c"
+        type = "ball-running-dots"
+        [fullScreen] = "true">
+    </ngx-spinner>
+    <div class="page-login">
+      <div class="text-center">
+        <a class="navbar-brand mb-4 h1" [routerLink]="['/auth/login']">
+          <img class="navbar-brand-image d-inline-block align-top mr-2" src="assets/images/cbs-signature[15928].png" alt="greatplacetowork">
+        </a>
+        <hr/>
+      </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm">
+            <div class="form-group">
+              <label for="exampleDropdownFormEmail1" class="form-label">Email address</label>
+              <input type="email" formControlName="username" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+              <label for="exampleDropdownFormPassword1" class="form-label">Password</label>
+              <input type="password" formControlName="password"  class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+            </div>
+            <button type="submit" (click)="login()" [disabled]="!loginForm.valid" class="btn btn-sm btn-block btn-primary">Sign in</button>
+          </form>
+        </div>
+        <div class="card-footer text-center">
+               <em> Old User?</em> &nbsp;&nbsp; <a [routerLink]="['/auth/getnewprofile']"><small><em>Get New Profile</em></small></a>
+        </div>
+      </div>
+    </div>

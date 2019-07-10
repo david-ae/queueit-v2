@@ -1,0 +1,235 @@
+<!-- Start Header Top Area -->
+<div class="adminx-container">
+    <nav class="navbar navbar-expand justify-content-between fixed-top">
+        <a class="navbar-brand mb-0 h1 d-none d-md-block" href="index.html">
+            <img src="./../../../assets/images/fav.png" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
+            QueueIT
+        </a>
+
+        <div class="d-flex flex-1 d-block d-md-none">
+            <a class="sidebar-toggle ml-3">
+                <i-feather name="menu"></i-feather>
+            </a>
+        </div>
+
+        <ul class="navbar-nav d-flex justify-content-end mr-2">
+            <!-- Notificatoins -->
+            <li class="nav-item dropdown d-flex align-items-center mr-2">
+            <a class="nav-link nav-link-notifications" id="dropdownNotifications" data-toggle="dropdown" href="#">
+                <i class="oi oi-bell display-inline-block align-middle"></i>
+                <span class="nav-link-notification-number">3</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-notifications" aria-labelledby="dropdownNotifications">
+                <div class="notifications-header d-flex justify-content-between align-items-center">
+                <span class="notifications-header-title">
+                    Notifications
+                </span>
+                <a href="#" class="d-flex"><small>Mark all as read</small></a>
+                </div>
+
+                <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action unread">
+                    <p class="mb-1">Invitation for <strong>Lunch</strong> on <strong>Jan 12th 2018</strong> by <strong>Laura</strong></p>
+
+                    <div class="mb-1">
+                    <button type="button" class="btn btn-primary btn-sm">Accept invite</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm">Decline</button>
+                    </div>
+
+                    <small>1 hour ago</small>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action">
+                    <p class="mb-1"><strong class="text-success">Goal completed</strong><br />1,000 new members today</p>
+                    <small>3 days ago</small>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action">
+                    <p class="mb-1 text-danger"><strong>System error detected</strong></p>
+                    <small>3 days ago</small>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action">
+                    <p class="mb-1">Your task <strong>Design Draft</strong> is due today.</p>
+                    <small>4 days ago</small>
+                </a>
+                </div>
+
+                <div class="notifications-footer text-center">
+                <a href="#"><small>View all notifications</small></a>
+                </div>
+            </div>
+            </li>
+            <!-- Notifications -->
+            <li class="nav-item dropdown">
+            <a class="nav-link avatar-with-name" id="navbarDropdownMenuLink" data-toggle="dropdown" href="#">
+                <img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg" class="d-inline-block align-top" alt="">
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">My Profile</a>
+                <a class="dropdown-item" href="#">My Tasks</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" href="#">Sign out</a>
+            </div>
+            </li>
+        </ul>
+    </nav>
+    <!-- Sidebar -->
+    <div class="adminx-sidebar expand-hover push">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a [routerLink]="['/admin/dashboard']" class="sidebar-nav-link active">
+                    <span class="sidebar-nav-icon">
+                    <i-feather name="activity">
+                        Activity
+                    </i-feather>
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Activity
+                    </span>
+                    <span class="sidebar-nav-end">
+
+                    </span>
+                </a>
+            </li>
+
+            <li class="sidebar-nav-item" >
+                <a class="sidebar-nav-link" data-toggle="collapse" href="#administration" aria-expanded="false" aria-controls="administration">
+                    <span class="sidebar-nav-icon">
+                        <i-feather name="settings">
+                            Administration
+                        </i-feather>
+                    </span>
+                    <span class="sidebar-nav-name">
+                        Administration
+                    </span>
+                    <span class="sidebar-nav-end">
+                        <i-feather name="chevron-right"></i-feather>
+                    </span>
+                </a>
+                <ul class="sidebar-sub-nav collapse" id="administration">
+                    <li class="sidebar-nav-item">
+                        <a [routerLink]="['/admin/roles']" class="sidebar-nav-link">
+                        <span class="sidebar-nav-abbr">
+                            Mr
+                        </span>
+                        <span class="sidebar-nav-name">
+                            Manage Roles
+                        </span>
+                        </a>
+                    </li>
+        
+                    <li class="sidebar-nav-item">
+                        <a [routerLink]="['/admin/status']" class="sidebar-nav-link">
+                        <span class="sidebar-nav-abbr">
+                            Ms
+                        </span>
+                        <span class="sidebar-nav-name">
+                            Manage Status
+                        </span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a [routerLink]="['/admin/transactiontypes']" class="sidebar-nav-link">
+                        <span class="sidebar-nav-abbr">
+                            Mt
+                        </span>
+                        <span class="sidebar-nav-name">
+                            Manage Transaction Types
+                        </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="sidebar-nav-item">
+            <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#user" aria-expanded="false" aria-controls="user">
+                <span class="sidebar-nav-icon">
+                    <i-feather name="User">
+                        Manage Users
+                    </i-feather>
+                </span>
+                <span class="sidebar-nav-name">
+                    Manage Users
+                </span>
+                <span class="sidebar-nav-end">
+                    <i-feather name="chevron-right"></i-feather>
+                </span>
+            </a>
+
+            <ul class="sidebar-sub-nav collapse" id="user">
+                <li class="sidebar-nav-item">
+                <a [routerLink]="['/admin/update-user-profile']" class="sidebar-nav-link">
+                    <span class="sidebar-nav-abbr">
+                    Up
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Update User Profile
+                    </span>
+                </a>
+                </li>
+
+                <li class="sidebar-nav-item">
+                <a [routerLink]="['/admin/update-user-role']" class="sidebar-nav-link">
+                    <span class="sidebar-nav-abbr">
+                        Ur
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Update User Role
+                    </span>
+                </a>
+                </li>
+                <li class="sidebar-nav-item">
+                <a [routerLink]="['/admin/change-user-password']" class="sidebar-nav-link">
+                    <span class="sidebar-nav-abbr">
+                        Cp
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Change User Password
+                    </span>
+                </a>
+                </li>
+            </ul>
+            </li>
+
+            <li class="sidebar-nav-item">
+                <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#navUI" aria-expanded="false" aria-controls="navUI">
+                    <span class="sidebar-nav-icon">
+                    <i-feather name="book">
+                        Reports
+                    </i-feather>
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Reports
+                    </span>
+                    <span class="sidebar-nav-end">
+                        <i-feather name="chevron-right"></i-feather>
+                    </span>
+                </a>
+
+                <ul class="sidebar-sub-nav collapse" id="navUI">
+                    <li class="sidebar-nav-item">
+                        <a [routerLink]="['/admin/transaction-report']" class="sidebar-nav-link">
+                            <span class="sidebar-nav-abbr">
+                            Tr
+                            </span>
+                            <span class="sidebar-nav-name">
+                            Transaction Report
+                            </span>
+                        </a>
+                    </li>                    
+                </ul>
+            </li>
+        </ul>
+    </div><!-- Sidebar End -->
+
+    <!-- Main Content -->
+    <div class="adminx-content">
+        <div class="adminx-main-content">
+            <div class="container-fluid">
+                <router-outlet></router-outlet>    
+            </div>
+        </div>
+    </div>
+</div>

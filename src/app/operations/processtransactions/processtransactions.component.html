@@ -1,0 +1,204 @@
+<div *mobxAutorun  class="form-element-area">
+<div  class="modal fade" id="myModaltwo" role="dialog">
+        <ngx-spinner 
+            bdOpacity = 0.9
+            bdColor = "rgba(182,217,216,0.42)"
+            size = "medium"
+            color = "#48567c"
+            type = "ball-running-dots"
+            [fullScreen] = "true">
+        </ngx-spinner>
+
+        <form [formGroup]="assignToColleagueForm">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h2>Assign to Colleague</h2>
+                    <p>
+                        Please select a Teller to continue processing the transaction
+                    </p>
+                    <select name="teller" formControlName="tellerid" class="form-control" required>
+                        <option value="" disabled selected>--Select Colleague--</option>
+                        <option *ngFor="let seniorteller of tellerStore.getSeniorTellerList" [value]="seniorteller.identity">{{seniorteller.firstname}}&nbsp;&nbsp;{{seniorteller.lastname}}</option>
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <div class="modal-footer">
+                    <button type="button" (click)="assignTransactionToColleague()"  class="btn btn-default" data-dismiss="modal">Assign Transaction</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-element-list">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-6 col-sm-7 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="form-ic-cmp">
+                                    <i class="notika-icon notika-support"></i>
+                                </div>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" placeholder="Filter Transaction By Reg Number, Amount, Transaction Type">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="nk-int-mk sl-dp-mn sm-res-mg-t-10">
+                                <h2>Search By Transaction Type</h2>
+                            </div>
+                            <div class="bootstrap-select fm-cmp-mg">
+                                <select class="selectpicker" data-live-search="true">
+                                    <option>Drama</option>
+                                    <option>Cariska</option>
+                                    <option>Cheriska</option>
+                                    <option>Malias</option>
+                                    <option>Kamines</option>
+                                    <option>Austranas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="nk-int-mk sl-dp-mn sm-res-mg-t-10">
+                                    <h2>Search By Status</h2>
+                                </div>
+                                <div class="bootstrap-select fm-cmp-mg">
+                                    <select class="selectpicker" data-live-search="true">
+                                        <option>Drama</option>
+                                        <option>Cariska</option>
+                                        <option>Cheriska</option>
+                                        <option>Malias</option>
+                                        <option>Kamines</option>
+                                        <option>Austranas</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>   
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="form-ic-cmp">
+                                    <i class="notika-icon notika-tax"></i>
+                                </div>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" placeholder="Transaction Type">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="form-ic-cmp">
+                                    <i class="notika-icon notika-credit-card"></i>
+                                </div>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" placeholder="Reg Number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="form-ic-cmp">
+                                    <i class="notika-icon notika-dollar"></i>
+                                </div>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" placeholder="Amount">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="form-ic-cmp">
+                                    <i class="notika-icon notika-next"></i>
+                                </div>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" placeholder="Transaction Status">
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                    <div *ngIf="transactionStore.getTellerTransactions.length !== 0; else transactionListBlock"  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-element-list mg-t-30">
+                            <div class="nk-int-st">
+                                <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search Today's Transactions" [ngModelOptions]="{standalone:true}">
+                            </div>
+                            <div class="bsc-tbl-cls">
+                                <form [formGroup]="processTransactionForm">
+                                    <table class="table table-sc-ex">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>S/N</th> -->
+                                                <th>Customer</th>
+                                                <th>Trans. Type</th>
+                                                <th>Reg. No.</th>
+                                                <th>Amount</th>                                                
+                                                <th>Status</th>
+                                                <th>As At</th>
+                                                <th>TreatedBy</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let transaction of transactionStore.tellerTransactions | transaction: searchText | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;"  class="active">
+                                                <!-- <td>{{i + 1}}</td> -->
+                                                <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
+                                                <td>{{transaction.transactionType}}</td>
+                                                <td>{{transaction.platenumber}}</td>
+                                                <td>{{transaction.amount}}</td>                                                
+                                                <td>{{transaction.status}}</td>
+                                                <td *ngIf="transaction.status == 'Submitted'">{{transaction.timeSubmitted | date:' h:mma'}}</td>
+                                                <td *ngIf="transaction.status == 'Completed'">{{transaction.timeCompleted | date:' h:mma'}}</td>
+                                                <td *ngIf="transaction.status == 'Rejected'">
+                                                    <table class="innertbl">
+                                                        <tbody>
+                                                            <tr ng-repeat="time in transaction.timeRejected" style="word-wrap: break-word;">
+                                                                <td>{{time | date:' h:mma'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>                                                
+                                                <td>
+                                                    <select class="form-control" formControlName="tellerid">
+                                                            <option value="" disabled selected>--Select Teller--</option>
+                                                        <option *ngFor="let teller of tellerStore.getTellerList" [value]="teller.identity">{{teller.firstname}}&nbsp;&nbsp;{{teller.lastname}}</option>
+                                                    </select>
+                                                </td>
+                                                <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Awaiting-Mail' ? true: false;">
+                                                    <input type="button" class="btn btn-yellow" value="Flag Issue" (click)="markTransactionHasIssue(transaction.id)"  ng-click="transactionIssue(transaction.id)"/>
+                                                </td>
+                                                <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Issue' ? true : transaction.status == 'Awaiting-Mail' ? true: false;">
+                                                    <input type="button" class="btn btn-outline-info btn-warning" value="Assign" (click)="assignTransaction(transaction.id)" />
+                                                </td>
+                                                <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Issue' ? true : trans.status == 'Awaiting-Mail' ? true: false;">
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModaltwo" (click)="selectedTransaction(transaction.id)">Assign to Colleague</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>                        
+                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                        </div>                  
+                    </div>
+                    <ng-template class="form-ic-cmp" #transactionListBlock>
+                        <div style="border: 1px solid black;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-element-list mg-t-30">
+                                    <h3>You have no existing transactions for today</h3>
+                            </div>
+                        </div>
+                    </ng-template>
+             </div>
+    </div>
+</div>

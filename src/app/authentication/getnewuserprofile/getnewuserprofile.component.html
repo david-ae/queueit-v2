@@ -1,0 +1,44 @@
+<div class="adminx-container d-flex justify-content-center align-items-center">
+        <ngx-spinner 
+        bdOpacity = 0.9
+        bdColor = "rgba(182,217,216,0.42)"
+        size = "medium"
+        color = "#48567c"
+        type = "ball-running-dots"
+        [fullScreen] = "true">
+    </ngx-spinner>
+    <div class="page-login">
+      <div class="text-center">
+        <a class="navbar-brand mb-4 h1" [routerLink]="['/auth/login']">
+          <img class="navbar-brand-image d-inline-block align-top mr-2" src="./../../../assets/images/cbs-signature[15928].png" alt="greatplacetowork">
+        </a>
+        <hr/>
+      </div>
+        <div class="card-body">
+          <form [formGroup]="getNewUserProfileForm">
+            <a [routerLink]="['/auth/login']" class="btn btn-sm btn-block btn-primary" style="color: white">Back to Login</a>
+            <br/>
+            <h3 class="text-center">Get Your New Profile Here</h3>
+            <div class="form-group">
+              <label for="exampleDropdownFormEmail1" class="form-label">Email address</label>
+              <input type="email" formControlName="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+            </div>
+            <div class="form-group" *ngIf="isNotNull; else elseNoUserFound">
+                <p class="card-text">
+                    <em><b>{{userStore.user.firstname}}&nbsp;&nbsp;{{userStore.user.lastname}}</b></em>
+                </p>
+            </div>
+            <div class="form-group" *ngIf="isNotNull;">
+                <p class="card-text" *ngFor="let role of userStore.user.roles">
+                    <em><b>{{name}}</b></em>
+                </p>
+            </div>
+            <button *ngIf="!isNotNull" [disabled]="!getNewUserProfileForm.valid" (click)="getUserDetails()" class="btn btn-sm btn-block btn-success">Retrieve Details</button>
+            <button *ngIf="isNotNull"  class="btn btn-sm btn-block btn-success">Create New Profile</button>            
+            <ng-template *ngIf="!isNotNull"  #elseNoUserFound>
+                <h1>No Existing User with that Email. Please verify and try again</h1>
+            </ng-template>            
+          </form>
+        </div>
+    </div>
+</div>

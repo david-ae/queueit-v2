@@ -1,0 +1,6 @@
+import { UserVO } from "./valueobjects/userVO";
+
+export class Status{
+    id: string;
+    name: string;
+}
