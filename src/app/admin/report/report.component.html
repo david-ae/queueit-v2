@@ -133,12 +133,8 @@
                     </table>    
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>                    
                 </div>                
-          </div>
-          <ng-template class="form-ic-cmp" #reportElseBlock>
-                <div style="border: 1px solid black;" class="bsc-tbl-hvr">
-                    <div class="form-element-list mg-t-30">
-                        <h3><b><em>No transactions match search criteria</em></b></h3>
-                    </div>
-                </div>
-          </ng-template>
-      </div>
+    </div>
+    <ng-template #reportElseBlock>
+        <h3 class="card mb-grid text-center"><b><em>No transactions match search criteria</em></b></h3>
+    </ng-template>
+</div>
