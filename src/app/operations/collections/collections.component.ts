@@ -6,6 +6,12 @@ import { OperationsService } from '../services/operations.service';
 import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
 import { TransactionService } from '../services/transaction.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { GeneralService } from 'src/app/admin/services/general.service';
+import { Status } from 'src/app/domainmodel/status';
+import { StatusStore } from 'src/app/store/admin/statusstore';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TransactionTypeStore } from 'src/app/store/admin/transactiontypestore';
+import { TransactionType } from 'src/app/domainmodel/transactiontype';
 
 @Component({
   selector: 'app-collections',
@@ -21,8 +27,9 @@ export class CollectionsComponent implements OnInit {
   collection: any[] = this.transactionStore.transactions;
 
   constructor(public transactionStore: TransactionStore, private _configuration: Configuration,
-    private _operationsService: OperationsService, private _transactionService: TransactionService,
-    private spinner: NgxSpinnerService) { }
+    private _operationsService: OperationsService, public statusStore: StatusStore, 
+    private _transactionService: TransactionService, public transactionTypeStore: TransactionTypeStore,
+    private spinner: NgxSpinnerService, private _generalService: GeneralService) { }
 
   startSignalRConnection(){
     let builder = new HubConnectionBuilder();
@@ -38,6 +45,24 @@ export class CollectionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._generalService.getStatusList()
+        .subscribe((data: Status[]) => {
+          this.spinner.hide();
+            this.statusStore.statusList = data;
+        },
+        (err: HttpErrorResponse) => {
+            console.log("Error: " + err);
+        }
+    );
+    this._generalService.getTransactiontypes()
+        .subscribe((data: TransactionType[]) => {
+          this.spinner.hide();
+            this.transactionTypeStore.transactiontypes = data;
+        },
+        (err: HttpErrorResponse) => {
+            console.log("Error: " + err);
+        }
+    );
     this.spinner.show();
     this._operationsService.getTodaysTransactions()
     .subscribe(() => {

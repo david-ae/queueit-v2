@@ -1,133 +1,117 @@
-<br/>
-<div *mobxAutorun class="form-element-area">
-    <div class="container">
-        <div class="row">
-                <ngx-spinner 
-                    bdOpacity = 0.9
-                    bdColor = "rgba(182,217,216,0.42)"
-                    size = "medium"
-                    color = "#48567c"
-                    type = "ball-running-dots"
-                    [fullScreen] = "true">
-                </ngx-spinner>
+<!-- BreadCrumb -->
+<div *mobxAutorun class="row">
+        <ngx-spinner 
+        bdOpacity = 0.9
+        bdColor = "rgba(182,217,216,0.42)"
+        size = "medium"
+        color = "#48567c"
+        type = "ball-running-dots"
+        [fullScreen] = "true">
+    </ngx-spinner>    
+    <div class="col-lg-12">
+            <alert></alert>
+        <div class="card mb-grid">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header-title">Today's Transactions</div>
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="form-element-list">
-                    <div class="row">
-                        <div class="col-lg-7 col-md-6 col-sm-7 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="form-ic-cmp">
-                                    <i class="notika-icon notika-support"></i>
-                                </div>
-                                <div class="nk-int-st">
-                                    <input type="text" [(ngModel)]="searchText" class="form-control" 
-                                        placeholder="Filter Transaction By Reg Number, Amount, Transaction Type" [ngModelOptions]="{standalone: true}">
-                                </div>
-                            </div>
-                        </div>
+                <nav class="card-header-actions">
+                    <a class="card-header-action" data-toggle="collapse" href="#card1" aria-expanded="false" aria-controls="card1">
+                    <i-feather name="minus-circle"></i-feather>
+                    </a>
+                </nav>
+            </div>
+        <div class="card-body collapse show" id="card1">
+            <form>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="validationCustom01">Search By Status</label>
+                        <select class="form-control">
+                            <option *ngFor="let status of statusStore.statusList" [value]="status.id">{{status.name}}</option>
+                        </select>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="nk-int-mk sl-dp-mn sm-res-mg-t-10">
-                                <h2>Search By Transaction Type</h2>
-                            </div>
-                            <div class="bootstrap-select fm-cmp-mg">
-                                <select class="selectpicker" data-live-search="true">
-                                    <option>Drama</option>
-                                    <option>Cariska</option>
-                                    <option>Cheriska</option>
-                                    <option>Malias</option>
-                                    <option>Kamines</option>
-                                    <option>Austranas</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <div class="nk-int-mk sl-dp-mn sm-res-mg-t-10">
-                                    <h2>Search By Status</h2>
-                                </div>
-                                <div class="bootstrap-select fm-cmp-mg">
-                                    <select class="selectpicker" data-live-search="true">
-                                        <option>Drama</option>
-                                        <option>Cariska</option>
-                                        <option>Cheriska</option>
-                                        <option>Malias</option>
-                                        <option>Kamines</option>
-                                        <option>Austranas</option>
-                                    </select>
-                                </div>
-                            </div>
-                    </div>                  
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="validationCustom02">Search By Transaction Type</label>
+                        <select class="form-control">
+                            <option *ngFor="let transactionType of transactionTypeStore.transactiontypes" [value]="transactionType.id">{{transactionType.name}}</option>
+                        </select>
+                    </div>
                 </div>
+                <div class="form-row">
+                        <input type="text" [(ngModel)]="searchText" class="form-control" 
+                        placeholder="Filter Transaction By Reg Number, Amount, Transaction Type" [ngModelOptions]="{standalone: true}">
+                </div>
+            </form>
             </div>
         </div>
-            <div class="row container-outer">
-                <div *ngIf="transactionStore.getTransactionList.length !== 0; else transactionListBlock" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="normal-table-list mg-t-30">
-                        <div class="bsc-tbl-cls">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Agent Name</th>
-                                        <th>Trans. Type</th>
-                                        <th>Reg. No.</th>
-                                        <th>Submitted</th>
-                                        <th>Rejected</th>
-                                        <th>Completed</th>
-                                        <th>Treated By</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let transaction of transactionStore.transactions | transaction: searchText | tellertransaction: searchText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index;" class="active">
-                                        <td>{{i + 1}}</td>
-                                        <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
-                                        <td>{{transaction.transactionType}}</td>
-                                        <td>{{transaction.platenumber}}</td>
-                                        <td>{{transaction.timeSubmitted | date:'mediumTime' }}</td>
-                                        <td *ngIf="transaction.timeRejected !== null" >
-                                            <table class="innertbl">
-                                                <tbody>
-                                                    <tr *ngFor="let time of transaction.timeRejected" style="word-wrap: break-word;">
-                                                            <td>{{ time | date:'mediumTime' }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>                                            
-                                        </td>
-                                        <td *ngIf="transaction.timeCompleted !== null" >{{transaction.timeCompleted | date:'mediumTime' }}</td>
-                                        <td>
-                                            <table class="innertbl">
-                                                <tbody>
-                                                    <tr *ngFor="let teller of transaction.treatedBy" style="word-wrap: break-word;">
-                                                        <td>{{teller.firstname}}&nbsp;&nbsp;{{teller.lastname}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table> 
-                                        </td>
-                                        <td>{{transaction.status}}</td>
-                                        <td *ngIf="transaction.status == 'Processing'">
-                                            <button (click)="completeTransaction(transaction.id)"  class="btn btn-info notika-btn-primary waves-effect" >Complete Transaction</button>
-                                        </td>
-                                        <td *ngIf="transaction.status == 'Completed'">
-                                            <button (click)="returnedTransaction()" class="btn btn-info notika-btn-success waves-effect" >Return Job</button>
-                                        </td>
-                                        <td *ngIf="transaction.status == 'Processing' || transaction.status == 'Submitted'">
-                                            <button (click)="rejectTransaction(transaction.id)" class="btn btn-info notika-btn-danger waves-effect" >Reject Transaction</button>
-                                        </td>
-                                    </tr>                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <ng-template class="form-ic-cmp" #transactionListBlock>
-                    <div style="border: 1px solid black;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-element-list mg-t-30">
-                                <h3>No Existing Transactions for Today</h3>
-                        </div>
-                    </div>
-                </ng-template>
-             </div>
     </div>
 </div>
+<div *mobxAutorun class="row">
+    <div class="col-lg-12">
+        <div class="card mb-grid" *ngIf="transactionStore.getTransactionList.length !== 0; else transactionListBlock">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header-title">Transactions</div>
+            </div>
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="col">#</th>
+                        <th class="col">Agent Name</th>
+                        <th class="col">Trans. Type</th>
+                        <th class="col">Reg. No.</th>
+                        <th class="col">Submitted</th>
+                        <th class="col">Rejected</th>
+                        <th class="col">Completed</th>
+                        <th  class="col">Treated By</th>
+                        <th class="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transaction of transactionStore.transactions | transaction: searchText | tellertransaction: searchText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index;" class="active">
+                        <td>{{i + 1}}</td>
+                        <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
+                        <td>{{transaction.transactionType}}</td>
+                        <td>{{transaction.platenumber}}</td>
+                        <td>{{transaction.timeSubmitted | date:'mediumTime' }}</td>
+                        <td *ngIf="transaction.timeRejected !== null" >
+                            <table class="innertbl">
+                                <tbody>
+                                    <tr *ngFor="let time of transaction.timeRejected" style="word-wrap: break-word;">
+                                            <td>{{ time | date:'mediumTime' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>                                            
+                        </td>
+                        <td *ngIf="transaction.timeCompleted !== null" >{{transaction.timeCompleted | date:'mediumTime' }}</td>
+                        <td>
+                            <table class="innertbl">
+                                <tbody>
+                                    <tr *ngFor="let teller of transaction.treatedBy" style="word-wrap: break-word;">
+                                        <td>{{teller.firstname}}&nbsp;&nbsp;{{teller.lastname}}</td>
+                                    </tr>
+                                </tbody>
+                            </table> 
+                        </td>
+                        <td>{{transaction.status}}</td>
+                        <td *ngIf="transaction.status == 'Processing'">
+                            <button (click)="completeTransaction(transaction.id)"  class="btn btn-info" >Complete Transaction</button>
+                        </td>
+                        <td *ngIf="transaction.status == 'Completed'">
+                            <button (click)="returnedTransaction()" class="btn btn-info btn-success" >Return Job</button>
+                        </td>
+                        <td *ngIf="transaction.status == 'Processing' || transaction.status == 'Submitted'">
+                            <button (click)="rejectTransaction(transaction.id)" class="btn btn-danger" >Reject Transaction</button>
+                        </td>
+                    </tr>                                    
+                </tbody>
+            </table>     
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>                    
+        </div> 
+    </div>  
+    <div class="col-md-12">
+        <ng-template #transactionListBlock>
+            <div class="card text-center mb-grid">
+                <h3><b><em>No transactions today</em></b></h3>
+            </div>
+        </ng-template>   
+    </div>          
+</div>    
