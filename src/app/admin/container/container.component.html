@@ -18,7 +18,7 @@
                 <img src="./../../../assets/images/user2.png" class="d-inline-block align-top" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item text-danger" [routerLink]="['/auth/login']" href="#">Sign out</a>
+                <a class="dropdown-item text-danger" [routerLink]="['/auth/login']" href="#">Log out</a>
             </div>
             </li>
         </ul>
@@ -168,6 +168,21 @@
                         </a>
                     </li>                    
                 </ul>
+            </li>
+            <li class="sidebar-nav-item">
+                <a [routerLink]="['/auth/login']" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon">
+                    <i-feather name="LogIn">
+                        Log Out
+                    </i-feather>
+                    </span>
+                    <span class="sidebar-nav-name">
+                    Log Out
+                    </span>
+                    <span class="sidebar-nav-end">
+
+                    </span>
+                </a>
             </li>
         </ul>
     </div><!-- Sidebar End -->

@@ -35,36 +35,29 @@ export class LoginComponent implements OnInit {
   }
 
   async login(){
-    this.alertService.success('hjgjgj');
-    // this.spinner.show();
-    // let model = new UserLoginApiModel();
-    // model.username = this.loginForm.get('username').value;
-    // model.password = this.loginForm.get('password').value;
+     this.spinner.show();
+     this._router.navigate(['/admin/dashboard']);
+    let model = new UserLoginApiModel();
+    model.username = this.loginForm.get('username').value;
+    model.password = this.loginForm.get('password').value;
 
-    // await this._authService.login(model)
-    //       .subscribe((data) => {
-    //         if(data){
-    //           this.spinner.hide();
-    //           this.userStore.user.identity = data.id;
-    //           this.userStore.user.email = data.email;
-    //           this.userStore.user.firstname = data.firstname;
-    //           this.userStore.user.lastname = data.lastname;
-    //           this.userStore.user.roles = data.roles;
-    //           this._authService.setSession(data);
-    //           /**use the user role to determine
-    //            * what page to navigate to
-    //            */
-    //           if(this.userStore.user.roles.includes("ADMINISTRATOR")){
-    //             this._router.navigate(['admin']);
-    //           }
-    //           else if(this.userStore.user.roles.includes("SENIOR TELLER")){
-    //             this._router.navigate(["operations/process-transactions"]);
-    //           }
-    //           else if(this.userStore.user.roles.includes("TELLER")){
-    //             this._router.navigate(["operations/process-jobs"]);
-    //           }
-    //         }
-    //       })
+    await this._authService.login(model)
+      .subscribe((data) => {
+        if(data){
+          this.spinner.hide();
+          this.userStore.user.identity = data.id;
+          this.userStore.user.email = data.email;
+          this.userStore.user.firstname = data.firstname;
+          this.userStore.user.lastname = data.lastname;
+          this.userStore.user.roles = data.roles;
+          this._authService.setSession(data);
+          /**use the user role to determine
+           * what page to navigate to
+           */
+          let route:string = this.userStore.accessibleRoute(this.userStore.user.roles[0]);
+          this._router.navigate([route]);
+        }
+      });
     
     // this._operationsService.getTodaysTransactions()
     // .subscribe((data: QueueITTransaction[]) => {

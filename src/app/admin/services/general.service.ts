@@ -10,6 +10,7 @@ import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { ChangePasswordApiModel } from '../apimodels/changepasswordapimodel';
 import { ManageUserApiModel } from '../apimodels/manageuserapimodel';
 import { ManageUserRoleApiModel } from './../apimodels/manageuserroleapimodel';
+import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,11 @@ export class GeneralService {
 
   getRoles(){
     return this._http.get<Role>(this._configuration.ServerAdminWithApiUrl + "getallroles", this.httpOptions)
+        .pipe(catchError(this.handleError));
+  }
+
+  getAllTellers(){
+    return this._http.get<UserVO>(this._configuration.ServerAdminWithApiUrl + "getalltellers", this.httpOptions)
         .pipe(catchError(this.handleError));
   }
 

@@ -9,6 +9,7 @@ export class TellerStore{
     @observable tellers: Accounts[] = [];
     @observable teller: Accounts = new Accounts();
     @observable tellersUserVO: UserVO[] = [];
+    @observable seniorTellersUserVO: UserVO[] = [];
 
     constructor(){}
 
@@ -19,13 +20,33 @@ export class TellerStore{
     @computed get getSeniorTellerList(){
         return this.seniortellers;
     }
+
+    @computed get getTellerUserrVOList(){
+        return this.tellersUserVO;
+    }
+
+    @computed get getSeniorTellerUserVOList(){
+        return this.seniorTellersUserVO;
+    }
+
+    @action getTellerUserVOById(id: string){
+        var teller = this.tellersUserVO.find(t => t.identity == id);
+        if(teller != null){
+            return teller;
+        }
+        return teller;
+    }
+
+    @action getTellersFromTellerList(tellers: UserVO[]){
+        this.tellersUserVO = tellers.filter(teller => teller.roles.find(role => role == "TELLER"));
+    }
     
     @action getTellerById(id: string){
         var teller = this.tellers.find(t => t.identity == id);
         if(teller != null){
             return teller;
         }
-        return null
+        return teller;
     }
 
     @computed get getAccountsUserVOEquivalent(){

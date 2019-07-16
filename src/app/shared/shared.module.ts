@@ -11,8 +11,8 @@ import { Menu, Camera, Heart, Github,
   Download, Edit3, Delete, Activity,
   Filter, File, Folder, User, 
   Settings, Server, Save, Search,
-  Send, Share2, Star, Sun  ,
-  MinusCircle,
+  Send, Share2, Star, Sun  , 
+  MinusCircle, LogOut, LogIn,
   Grid,UserCheck, Map
 } from 'angular-feather/icons';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -24,9 +24,11 @@ const icons = {
   Menu,
   MinusCircle,
   Home,
+  LogIn,
   Map,
   Camera,
   User,
+  LogOut,
   UserCheck,
   Heart,
   ChevronRight,

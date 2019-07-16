@@ -29,6 +29,16 @@ export class AuthService {
         .pipe(delay(100), catchError(this.handleError));
   }
 
+  getNewUserProfile(email: string){
+    return this._http.post(this._configuration.ApiAdminUrlAccount + "getNewTellerProfile", JSON.stringify(email), this.httpOptions)
+        .pipe(delay(100), catchError(this.handleError));
+  }
+
+  getUserOldAccount(email: string){
+    return this._http.post(this._configuration.ApiAdminUrlAccount + "getTellerUsingAccountByEmail", JSON.stringify(email), this.httpOptions)
+        .pipe(delay(100), catchError(this.handleError));
+  }
+
   setSession(authResult) {
       const expiresAt = moment().add(authResult.expires_in,'second');
       localStorage.removeItem('id_token');
