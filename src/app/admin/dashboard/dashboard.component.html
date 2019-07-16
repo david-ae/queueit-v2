@@ -123,7 +123,7 @@
                         </a>
                     </nav>
                 </div>
-                <div *ngIf="reportStore.getTransactionsInRange.length != 0; else transactionAnalysisReportElseBlock" class="card-body collapse show" id="card1">
+                <div *ngIf="reportStore.reportSystem.Tellers.length != 0; else transactionActivityReportElseBlock"  class="card-body collapse show" id="card1">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div class="card-header-title">{{transactionStatus}}&nbsp;&nbsp;Transactions</div>
                         <button class="btn btn-primary" (click)="tellerSubmittedTransaction()" >Submitted</button>
@@ -152,7 +152,7 @@
                     </table>
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
                 </div>
-                <ng-template #transactionAnalysisReportElseBlock>
+                <ng-template #transactionActivityReportElseBlock>
                     <h3 class="card mb-grid text-center"><b><em>Work has not started today</em></b></h3>
                 </ng-template>
             </div>
@@ -172,7 +172,7 @@
                         </a>
                     </nav>
                 </div>
-                <div class="card-body collapse show" id="card2">
+                <div *ngIf="reportStore.getTransactionsInRange.length != 0; else transactionAnalysisElseBlock" class="card-body collapse show" id="card2">
                     <form [formGroup]="quickViewForm">
                         <div class="input-group"> 
                             <button class="btn btn-outline-info calendar" (click)="dTo.toggle()" type="button">Select a Date</button>
@@ -186,6 +186,9 @@
                     </form>
                     
                 </div>
+                <ng-template #transactionAnalysisElseBlock>
+                    <h3 class="card mb-grid text-center"><b><em>No analysis spooled</em></b></h3>
+                </ng-template>
             </div>
         </div>
     </div>
