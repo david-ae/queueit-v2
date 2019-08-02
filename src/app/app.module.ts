@@ -12,6 +12,8 @@ import { OperationsModule } from './operations/operations.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { SharedModule } from './shared/shared.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { SharedModule } from './shared/shared.module';
     AdminModule,
     AuthenticationModule,
     OperationsModule,
-    SharedModule
+    SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     NgxSpinnerService

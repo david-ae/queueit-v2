@@ -35,8 +35,8 @@
             </div>
             <button *ngIf="!isNotNull" [disabled]="!getNewUserProfileForm.valid" (click)="getUserDetails()" class="btn btn-sm btn-block btn-success">Retrieve Details</button>
             <button *ngIf="isNotNull"  class="btn btn-sm btn-block btn-success">Create New Profile</button>            
-            <ng-template *ngIf="!isNotNull"  #elseNoUserFound>
-                <h1>No Existing User with that Email. Please verify and try again</h1>
+            <ng-template #elseNoUserFound>
+                <h1 *ngIf="!isNotNull" >No Existing User with that Email. Please verify and try again</h1>
             </ng-template>            
           </form>
         </div>

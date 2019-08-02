@@ -20,13 +20,13 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/assets",
-              "src/assets/images/fav.png"
+              "src/assets/images/fav.png",
+              "src/manifest.json"
             ],
             "styles": [
               "./src/assets/dist/css/adminx.css"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -44,7 +44,9 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "src/ngsw-config.json"
             }
           }
         },
@@ -78,7 +80,8 @@
             "scripts": [],
             "assets": [
               "src/assets/images/fav.png",
-              "src/assets"
+              "src/assets",
+              "src/manifest.json"
             ]
           }
         },

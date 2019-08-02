@@ -1,0 +1,11 @@
+{
+    "xml.fileAssociations": [
+        {
+            "systemId": "c:\\Users\\David\\Documents\\Apps\\queueitv2\\schema\\tns.xsd",
+            "pattern": "**/**/*.xml"
+        }
+    ],
+    "files.exclude": {
+        "schema": true
+    }
+}
