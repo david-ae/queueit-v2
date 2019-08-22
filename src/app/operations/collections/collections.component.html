@@ -1,13 +1,5 @@
 <!-- BreadCrumb -->
-<div *mobxAutorun class="row">
-        <ngx-spinner 
-        bdOpacity = 0.9
-        bdColor = "rgba(182,217,216,0.42)"
-        size = "medium"
-        color = "#48567c"
-        type = "ball-running-dots"
-        [fullScreen] = "true">
-    </ngx-spinner>    
+<div *mobxAutorun class="row">   
     <div class="col-lg-12">
             <alert></alert>
         <div class="card mb-grid">
@@ -26,13 +18,15 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="validationCustom01">Search By Status</label>
                         <select class="form-control">
-                            <option *ngFor="let status of statusStore.statusList" [value]="status.id">{{status.name}}</option>
+                                <option value="" disabled selected>--Select Status--</option>
+                            <option *ngFor="let status of statusFacade.statusList" [value]="status.id">{{status.name}}</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="validationCustom02">Search By Transaction Type</label>
                         <select class="form-control">
-                            <option *ngFor="let transactionType of transactionTypeStore.transactiontypes" [value]="transactionType.id">{{transactionType.name}}</option>
+                            <option value="" disabled selected>--Select Transaction Type--</option>
+                            <option *ngFor="let transactionType of transactionTypeFacade.getAllTransactionTypes" [value]="transactionType.id">{{transactionType.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -47,7 +41,7 @@
 </div>
 <div *mobxAutorun class="row">
     <div class="col-lg-12">
-        <div class="card mb-grid" *ngIf="transactionStore.getTransactionList.length !== 0; else transactionListBlock">
+        <div class="card mb-grid" *ngIf="operationsFacade.getTransactionList.length !== 0; else transactionListBlock">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-header-title">Transactions</div>
             </div>
@@ -66,13 +60,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let transaction of transactionStore.transactions | transaction: searchText | tellertransaction: searchText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index;" class="active">
+                    <tr *ngFor="let transaction of operationsFacade.transactions | transaction: searchText | tellertransaction: searchText | paginate: { itemsPerPage: 10, currentPage: p }; let i = index;" class="active">
                         <td>{{i + 1}}</td>
                         <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
                         <td>{{transaction.transactionType}}</td>
                         <td>{{transaction.platenumber}}</td>
                         <td>{{transaction.timeSubmitted | date:'mediumTime' }}</td>
-                        <td *ngIf="transaction.timeRejected !== null" >
+                        <td *ngIf="transaction.timeRejected.length !== 0; else rejectedTransaction" >
                             <table class="innertbl">
                                 <tbody>
                                     <tr *ngFor="let time of transaction.timeRejected" style="word-wrap: break-word;">
@@ -81,7 +75,13 @@
                                 </tbody>
                             </table>                                            
                         </td>
-                        <td *ngIf="transaction.timeCompleted !== null" >{{transaction.timeCompleted | date:'mediumTime' }}</td>
+                        <ng-template #rejectedTransaction>
+                            <td>Never Rejected</td>
+                        </ng-template>   
+                        <td *ngIf="transaction.timeCompleted !== null; else completedTransaction" >{{transaction.timeCompleted | date:'mediumTime' }}</td>
+                        <ng-template #completedTransaction>
+                            <td>Not Completed</td>
+                        </ng-template>   
                         <td>
                             <table class="innertbl">
                                 <tbody>
@@ -93,13 +93,13 @@
                         </td>
                         <td>{{transaction.status}}</td>
                         <td *ngIf="transaction.status == 'Processing'">
-                            <button (click)="completeTransaction(transaction.id)"  class="btn btn-info" >Complete Transaction</button>
+                            <button (click)="completeTransaction(transaction.id)"  class="btn btn-info" >Complete</button>
                         </td>
                         <td *ngIf="transaction.status == 'Completed'">
-                            <button (click)="returnedTransaction()" class="btn btn-info btn-success" >Return Job</button>
+                            <button (click)="returnedTransaction(transaction.id)" class="btn btn-info btn-success" >Return Job</button>
                         </td>
                         <td *ngIf="transaction.status == 'Processing' || transaction.status == 'Submitted'">
-                            <button (click)="rejectTransaction(transaction.id)" class="btn btn-danger" >Reject Transaction</button>
+                            <button (click)="rejectTransaction(transaction.id)" class="btn btn-danger" >Reject</button>
                         </td>
                     </tr>                                    
                 </tbody>

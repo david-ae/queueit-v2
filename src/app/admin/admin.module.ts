@@ -12,20 +12,20 @@ import { ReportComponent } from './report/report.component';
 import { Configuration } from '../config';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RoleStore } from '../store/admin/rolestore';
+import { RoleFacade } from '../services/admin/rolefacade';
 import { MobxAngularModule } from 'mobx-angular';
-import { StatusStore } from '../store/admin/statusstore';
-import { TransactionTypeStore } from '../store/admin/transactiontypestore';
+import { StatusFacade } from '../services/admin/statusfacade';
+import { TransactionTypeFacade } from '../services/admin/transactiontypefacade';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReportStore } from '../store/admin/reportstore';
+import { ReportFacade } from '../services/admin/reportsfacade';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TransactionPipe } from './pipes/transaction.pipe';
 import { ManageuserprofileComponent } from './manageuserprofile/manageuserprofile.component';
 import { ChangeuserpasswordComponent } from './changeuserpassword/changeuserpassword.component';
 import { ManageuserroleComponent } from './manageuserrole/manageuserrole.component';
-import { UserStore } from '../store/admin/userstore';
+import { UserFacade } from '../services/admin/userfacade';
 import { UserPipe } from './pipes/user.pipe';
 import { SharedModule } from '../shared/shared.module';
 
@@ -54,7 +54,7 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     routing
   ],
-  providers: [Configuration, RoleStore, StatusStore, TransactionTypeStore, ReportStore, UserStore,
+  providers: [Configuration, RoleFacade, StatusFacade, TransactionTypeFacade, ReportFacade, UserFacade,
     NgxSpinnerService
   ],
   exports:[NgxSpinnerModule]

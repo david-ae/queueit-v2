@@ -1,4 +1,4 @@
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 
 export abstract class UserTransactions{
     tellerName: UserVO;

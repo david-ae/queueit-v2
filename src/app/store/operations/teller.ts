@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 import { Injectable } from '@angular/core';
-import { Accounts } from 'src/app/domainmodel/valueobjects/accountvo';
+import { Accounts } from 'src/app/valueobjects/accountvo';
 
 @Injectable()
 export class TellerStore{

@@ -11,7 +11,7 @@ import { Menu, Camera, Heart, Github,
   Download, Edit3, Delete, Activity,
   Filter, File, Folder, User, 
   Settings, Server, Save, Search,
-  Send, Share2, Star, Sun  , 
+  Send, Share2, Star, Sun, Edit, 
   MinusCircle, LogOut, LogIn,
   Grid,UserCheck, Map
 } from 'angular-feather/icons';
@@ -19,11 +19,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MobxAngularModule } from 'mobx-angular';
+import { OperationsFacade } from '../services/operations/operationsfacade';
 
 const icons = {
   Menu,
   MinusCircle,
   Home,
+  Edit,
   LogIn,
   Map,
   Camera,
@@ -55,6 +57,6 @@ const icons = {
   declarations: [AlertComponent],
   exports:[AlertComponent, FeatherModule, NgxSpinnerModule,
           NgbModule, NgxPaginationModule, MobxAngularModule],
-  providers: [AlertService, NgxSpinnerModule]
+  providers: [AlertService, NgxSpinnerModule, OperationsFacade]
 })
 export class SharedModule { }

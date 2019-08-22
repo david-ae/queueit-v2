@@ -1,15 +1,6 @@
 <!-- BreadCrumb -->
-    <div *mobxAutorun class="row">
-            <ngx-spinner 
-            bdOpacity = 0.9
-            bdColor = "rgba(182,217,216,0.42)"
-            size = "medium"
-            color = "#48567c"
-            type = "ball-running-dots"
-            [fullScreen] = "true">
-        </ngx-spinner>    
-        <div class="col-lg-5">
-                <alert></alert>
+    <div *mobxAutorun class="row">               
+        <div class="col-lg-5">                
             <div class="card mb-grid">
                 <div class="card-header d-flex justify-content-between align-items-center">
     
@@ -35,25 +26,27 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="validationCustom01">Transaction Type</label>
                             <select class="form-control" formControlName="transactiontype">
-                                <option *ngFor="let transactionType of transactionTypeStore.transactiontypes" [value]="transactionType.name">{{transactionType.name}}</option>
+                                    <option value="0" disabled selected>--Select Transaction Type--</option>
+                                <option *ngFor="let transactionType of transactionTypeFacade.transactiontypes" [value]="transactionType.name">{{transactionType.name}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="validationCustom01">Registration No</label>
-                            <input type="text" formControlName="registrationnumber" class="form-control" id="validationCustom01" placeholder="First name" value="Mark" required>
+                            <input type="text" formControlName="registrationnumber" class="form-control" id="validationCustom01" placeholder="Registration Number" value="Mark" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="validationCustom02">Amount</label>
-                            <input type="number" formControlName="amount" class="form-control" id="validationCustom02" placeholder="Last name" value="Otto" required>
+                            <input type="number" formControlName="amount" class="form-control" id="validationCustom02" placeholder="Amount" value="" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="validationCustom01">Assign to a Teller</label>
                             <select class="form-control" formControlName="tellerid">
-                                <option *ngFor="let seniorteller of tellerStore.getSeniorTellerList" [value]="seniorteller.identity">{{seniorteller.firstname}}&nbsp;&nbsp;{{seniorteller.lastname}}</option>
+                                    <option value="0" disabled selected>--Select Teller--</option>
+                                <option *ngFor="let seniorteller of operationsFacade.getSeniorTellerList" [value]="seniorteller.identity">{{seniorteller.firstname}}&nbsp;&nbsp;{{seniorteller.lastname}}</option>
                             </select>
                         </div>
                     </div>
@@ -76,7 +69,7 @@
         </div>
         <div class="col-lg-7">
             <!-- Table seamless striped -->
-            <div *ngIf="transactionStore.getTransactionList.length !== 0; else transactionListBlock" class="card mb-grid">
+            <div *ngIf="operationsFacade.getTransactionList.length !== 0; else transactionListBlock" class="card mb-grid">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search Today's Transactions" [ngModelOptions]="{standalone:true}">
                 </div>
@@ -91,7 +84,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let transaction of transactionStore.transactions | transaction: searchText | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
+                    <tr *ngFor="let transaction of operationsFacade.transactions | transaction: searchText | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
                         <th scope="row">{{i + 1}}</th>
                         <td>{{i + 1}}</td>
                         <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
@@ -99,12 +92,12 @@
                         <td>{{transaction.platenumber}}</td>
                         <td>{{transaction.status}}</td>
                         <td>
-                            <a (click)="editTransaction(transaction.id)" class="btn btn-lg btn-labeled-right btn-primary mr-2">
+                            <a (click)="editTransaction(transaction.id)" class="btn btn-labeled-right btn-primary">
                                 <span class="btn-label">
-                                    <i-feather name="map"></i-feather>
+                                    <i-feather name="Edit"></i-feather>
                                 </span>
                                 <span class="btn-text">
-                                    Edit Transaction
+                                    Edit
                                 </span>
                             </a>
                         </td>

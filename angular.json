@@ -26,7 +26,13 @@
             "styles": [
               "./src/assets/dist/css/adminx.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/popper.js/dist/popper.min.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "./src/assets/dist/js/vendor.js",
+              "./src/assets/dist/js/adminx.js"
+            ]
           },
           "configurations": {
             "production": {

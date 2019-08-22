@@ -1,20 +1,38 @@
-<alert></alert>
-<div class="adminx-container d-flex justify-content-center align-items-center">
-        <ngx-spinner 
-        bdOpacity = 0.9
-        bdColor = "rgba(182,217,216,0.42)"
-        size = "medium"
-        color = "#48567c"
-        type = "ball-running-dots"
-        [fullScreen] = "true">
-    </ngx-spinner>
+<!-- Modal -->
+<form [formGroup]="roleSelectionForm">
+    <button #selectRoleButton type="button" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalCenter" hidden>Select a role</button>
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Select a Role</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <ul style="display: inline-flex; list-style: none;">
+              <li><button type="button" class="btn btn-info" (click)="goToAdministration()">Administrator</button></li>  &nbsp;&nbsp;
+              <li><button type="button" class="btn btn-warning" (click)="goToOperations()"> Operations </button></li>  
+            </ul>
+          </div>
+          <div class="modal-footer">
+          <button #closeModalButton type="button" class="btn btn-secondary" data-dismiss="modal" hidden>Close</button>
+          </div>
+      </div>
+      </div>
+  </div>
+</form>
+<!-- Modal -->
+<div class="adminx-container d-flex justify-content-center align-items-center">        
     <div class="page-login">
       <div class="text-center">
         <a class="navbar-brand mb-4 h1" [routerLink]="['/auth/login']">
           <img class="navbar-brand-image d-inline-block align-top mr-2" src="assets/images/cbs-signature[15928].png" alt="greatplacetowork">
         </a>
         <hr/>
-      </div>
+      </div>      
+  <alert></alert>
         <div class="card-body">
           <form [formGroup]="loginForm">
             <div class="form-group">
@@ -33,3 +51,5 @@
         </div>
       </div>
     </div>
+
+    

@@ -47,7 +47,7 @@
     </div>
     <div class="col-lg-7">
         <!-- Table seamless striped -->
-        <div *ngIf="statusStore.getAllStatus.length !== 0; else statusListElseBlock" class="card mb-grid">
+        <div *ngIf="statusFacade.getAllStatus.length !== 0; else statusListElseBlock" class="card mb-grid">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-header-title">Available Status</div>
             </div>
@@ -59,13 +59,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let status of statusStore.statusList | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
+                <tr *ngFor="let status of statusFacade.statusList | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
                     <th scope="row">{{i + 1}}</th>
                     <td>{{status.name}}</td>
                     <td>
-                        <a (click)="editStatus(status.id)" class="btn btn-lg btn-labeled-right btn-primary mr-2">
+                        <a (click)="editStatus(status.id)" class="btn btn-labeled-right btn-primary">
                             <span class="btn-label">
-                                <i-feather name="map"></i-feather>
+                                <i-feather name="Edit"></i-feather>
                             </span>
                             <span class="btn-text">
                                 Edit Status

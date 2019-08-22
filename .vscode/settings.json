@@ -3,9 +3,16 @@
         {
             "systemId": "c:\\Users\\David\\Documents\\Apps\\queueitv2\\schema\\tns.xsd",
             "pattern": "**/**/*.xml"
+        },
+        {
+            "systemId": "http://www.w3.org/2001/XMLSchema.xsd",
+            "pattern": "c:\\Users\\David\\Documents\\Apps\\queueitv2\\schema\\tns.xsd"
         }
     ],
     "files.exclude": {
         "schema": true
-    }
+    },
+    "xml.completion.autoCloseTags": true,
+    "xml.format.enabled": true,
+    "xml.validation.enabled": true
 }

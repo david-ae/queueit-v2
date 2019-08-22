@@ -47,7 +47,7 @@
     </div>
     <div class="col-lg-7">
         <!-- Table seamless striped -->
-        <div *ngIf="roleStore.getAllRoles.length !== 0; else roleListElseBlock" class="card mb-grid">
+        <div *ngIf="roleFacade.getAllRoles.length !== 0; else roleListElseBlock" class="card mb-grid">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-header-title">Available Roles</div>
             </div>
@@ -59,13 +59,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let role of roleStore.getAllRoles | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
+                <tr *ngFor="let role of roleFacade.getAllRoles | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">                                            
                     <th scope="row">{{i + 1}}</th>
                     <td>{{role.name}}</td>
                     <td>
-                        <a (click)="editRole(role.id)" class="btn btn-lg btn-labeled-right btn-primary mr-2">
+                        <a (click)="editRole(role.id)" class="btn btn-labeled-right btn-primary">
                             <span class="btn-label">
-                                <i-feather name="map"></i-feather>
+                                <i-feather name="Edit"></i-feather>
                             </span>
                             <span class="btn-text">
                                 Edit Role

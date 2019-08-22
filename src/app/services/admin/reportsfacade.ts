@@ -1,13 +1,13 @@
 import { observable, computed, action } from 'mobx';
 import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { Injectable } from '@angular/core';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 import { TellerTransactionActivity } from './displaymodels/telleractivitybreakdown';
 import { TellerReportSystem } from './storehelpers/tellerreportsystem';
 import { TellerTransactionItem } from './storehelpers/tellertransactionitem';
 
 @Injectable()
-export class ReportStore{
+export class ReportFacade{
 
     //#region "containers for data"
     @observable transactionsInRange: QueueITTransaction[] = [];

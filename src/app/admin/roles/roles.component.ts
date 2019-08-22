@@ -3,7 +3,7 @@ import { GeneralService } from '../services/general.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Role } from 'src/app/domainmodel/role';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RoleStore } from 'src/app/store/admin/rolestore';
+import { RoleFacade } from 'src/app/services/admin/rolefacade';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from 'src/app/shared/_services';
 
@@ -19,9 +19,9 @@ export class RolesComponent implements OnInit {
   roleForm: FormGroup;
 
   p: number = 1;
-  collection: any[] = this.roleStore.roles;
+  collection: any[] = this.roleFacade.roles;
 
-  constructor(public roleStore: RoleStore, private _generalService: GeneralService,
+  constructor(public roleFacade: RoleFacade, private _generalService: GeneralService,
     private spinner: NgxSpinnerService, public alertService: AlertService) { 
     this.roleForm = new FormGroup({
       rolename: new FormControl('', Validators.required)
@@ -33,7 +33,7 @@ export class RolesComponent implements OnInit {
     this._generalService.getRoles()
           .subscribe((data: Role[]) => {
             this.spinner.hide();
-              this.roleStore.roles = data;              
+              this.roleFacade.roles = data;              
           },
           (err: HttpErrorResponse) => {
               console.log("Error: " + err);
@@ -48,7 +48,7 @@ export class RolesComponent implements OnInit {
     .subscribe((data: Role) => {
       this.spinner.hide();
       this.alertService.success(name.toUpperCase() + " Successfully Added as a Role.")
-        this.roleStore.roles = [...this.roleStore.roles, data];
+        this.roleFacade.roles = [...this.roleFacade.roles, data];
     },
     (err: HttpErrorResponse) => {
       // this.spinner.hide();
@@ -58,9 +58,9 @@ export class RolesComponent implements OnInit {
   }
 
   editRole(id: any){
-    this.roleStore.role = this.roleStore.getRole(id);
+    this.roleFacade.role = this.roleFacade.getRole(id);
     this.roleForm.setValue({
-       rolename: this.roleStore.role.name
+       rolename: this.roleFacade.role.name
     });
     this.buttonName = "Update Role";
   }
@@ -68,13 +68,13 @@ export class RolesComponent implements OnInit {
   updateRole(){
     this.spinner.show();
     let role = new Role();
-    role.id = this.roleStore.role.id;
+    role.id = this.roleFacade.role.id;
     role.name = this.roleForm.get("rolename").value;
 
     this._generalService.updateRole(role)
       .subscribe(() => {
         this.spinner.hide();
-        this.roleStore.updateRole(role);
+        this.roleFacade.updateRole(role);
         this.alertService.success("Role Update Successful");
       },
           (err: HttpErrorResponse) => {

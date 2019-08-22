@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { observable, action, autorun, computed } from 'mobx'
 import { Role } from '../../domainmodel/role';
-import { GeneralService } from '../../admin/services/general.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { GeneralService } from 'src/app/admin/services/general.service';
 
 @Injectable()
-export class RoleStore{
+export class RoleFacade{
     @observable roles: Role[] = [];
     @observable role: Role = new Role();
 
-    constructor(){
+    constructor(private _generalService: GeneralService){
+        this.roles = [];
+        this.role = new Role();
         autorun(() => {
-
+            this._generalService.getRoles()
+                .subscribe((data: Role[]) => {
+                    this.roles = data;
+                });
         });
     }
 

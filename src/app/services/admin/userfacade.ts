@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 
-export class UserStore{
+export class UserFacade{
     @observable users: UserVO[] = [];
     @observable user: UserVO = new UserVO();
     @observable error: string = null;

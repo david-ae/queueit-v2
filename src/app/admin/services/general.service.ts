@@ -10,7 +10,7 @@ import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { ChangePasswordApiModel } from '../apimodels/changepasswordapimodel';
 import { ManageUserApiModel } from '../apimodels/manageuserapimodel';
 import { ManageUserRoleApiModel } from './../apimodels/manageuserroleapimodel';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 
 @Injectable({
   providedIn: 'root'

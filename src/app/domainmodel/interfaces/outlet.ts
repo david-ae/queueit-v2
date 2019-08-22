@@ -1,5 +1,5 @@
-import { AddressVO } from "../valueobjects/addressVO";
-import { UserVO } from "../valueobjects/userVO";
+import { AddressVO } from "../../valueobjects/addressVO";
+import { UserVO } from "../../valueobjects/userVO";
 
 export abstract class Outlet{
     name: string;

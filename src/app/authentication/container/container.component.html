@@ -1,18 +1,12 @@
-<!-- <nb-layout>
-    <nb-layout-header fixed>
-      <a [routerLink]="['/admin/dashboard']">
-        Courteville Business Solutions
-      </a>
-     </nb-layout-header>
-    <nb-layout-column>
-      
-      </nb-layout-column>
-    <nb-layout-column>
-      
-    </nb-layout-column>
-    <nb-layout-footer>Courteville Business Solutions {{year}} &copy;</nb-layout-footer>
-  </nb-layout> -->  
-  <div class="login-content" style="background-image: url('./../../../assets/images/largeback.jpg')">
-      <router-outlet></router-outlet>
-  </div>
+<div class="login-content" style="background-image: url('./../../../assets/images/largeback.jpg')">
+  <ngx-spinner 
+      bdOpacity = 0.9
+      bdColor = "rgba(182,217,216,0.42)"
+      size = "medium"
+      color = "#48567c"
+      type = "ball-running-dots"
+      [fullScreen] = "true">
+  </ngx-spinner>  
+    <router-outlet></router-outlet>
+</div>
   

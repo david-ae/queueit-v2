@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StatusStore } from 'src/app/store/admin/statusstore';
+import { StatusFacade } from 'src/app/services/admin/statusfacade';
 import { GeneralService } from '../services/general.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Status } from 'src/app/domainmodel/status';
@@ -19,9 +19,9 @@ export class StatusComponent implements OnInit {
   statusForm: FormGroup;
 
   p: number = 1;
-  collection: any[] = this.statusStore.statusList;
+  collection: any[] = this.statusFacade.statusList;
 
-  constructor(public statusStore: StatusStore, private _generalService: GeneralService,
+  constructor(public statusFacade: StatusFacade, private _generalService: GeneralService,
     private spinner: NgxSpinnerService) { 
     this.statusForm = new FormGroup({
       statusname: new FormControl('', Validators.required)
@@ -33,7 +33,7 @@ export class StatusComponent implements OnInit {
     this._generalService.getStatusList()
         .subscribe((data: Status[]) => {
           this.spinner.hide();
-            this.statusStore.statusList = data;
+            this.statusFacade.statusList = data;
         },
         (err: HttpErrorResponse) => {
             console.log("Error: " + err);
@@ -47,14 +47,14 @@ export class StatusComponent implements OnInit {
     this._generalService.addStatus(statusname)
         .subscribe((data: Status) => {
           this.spinner.hide();
-            this.statusStore.statusList = [...this.statusStore.statusList, data];
+            this.statusFacade.statusList = [...this.statusFacade.statusList, data];
         });
   }
 
   editStatus(id: string){
-    this.statusStore.status = this.statusStore.getStatus(id);
+    this.statusFacade.status = this.statusFacade.getStatus(id);
     this.statusForm.setValue({
-       statusname: this.statusStore.status.name
+       statusname: this.statusFacade.status.name
     });
     this.buttonName = "Update Status";
   }
@@ -62,12 +62,12 @@ export class StatusComponent implements OnInit {
   updateStatus(){
     this.spinner.show();
     let status = new Status();
-    status.id = this.statusStore.status.id;
+    status.id = this.statusFacade.status.id;
     status.name = this.statusForm.get("statusname").value;
     this._generalService.updateStatus(status)
       .subscribe((data: Status) => {
         this.spinner.hide();
-        this.statusStore.updateStatus(data);
+        this.statusFacade.updateStatus(data);
       },
           (err: HttpErrorResponse) => {
               console.log("Error: " + err);

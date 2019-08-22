@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserAccess } from 'src/app/services/authentication/usersAccess';
 
 @Component({
   selector: 'app-container',
@@ -8,10 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class ContainerComponent implements OnInit {
 
   date: any;
-  constructor() { }
+  
+  constructor(private userAccess: UserAccess) { }
 
   ngOnInit() {
     this.date = new Date().getFullYear();
+    console.log(this.userAccess.isTeller);
   }
 
 }

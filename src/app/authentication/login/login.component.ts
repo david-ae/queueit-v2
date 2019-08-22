@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { TransactionStore } from 'src/app/store/operations/transaction';
@@ -7,9 +7,11 @@ import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { AuthService } from '../services/auth.service';
 import { UserLoginApiModel } from '../apimodels/userloginapimodel';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserStore } from 'src/app/store/authentication/userstore';
+import { UserAccess } from 'src/app/services/authentication/usersAccess';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from 'src/app/shared/_services';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-login',
@@ -20,49 +22,77 @@ export class LoginComponent implements OnInit {
 
   private _hubConnection: HubConnection;
   loginForm: FormGroup;
+  roleSelectionForm: FormGroup;
   isRequesting: boolean;
+  @ViewChild('selectRoleButton') fileInputOpenModal: ElementRef;
+  @ViewChild('closeModalButton') fileInputCloseModal: ElementRef;
   
   constructor(private _router: Router, private _operationsService: OperationsService, 
     public transactionStore: TransactionStore, private _authService: AuthService,
-    public userStore: UserStore, private spinner: NgxSpinnerService, public alertService: AlertService) { 
+    public userAccess: UserAccess, private spinner: NgxSpinnerService, public alertService: AlertService) { 
       this.loginForm = new FormGroup({
         username: new FormControl('', Validators.required),
         password: new FormControl('', Validators.required)
       });
+      this.roleSelectionForm = new FormGroup({
+
+      });
     }
   
   ngOnInit() {       
+    this._authService.logout();
   }
 
-  async login(){
+  goToAdministration(){
+    this._router.navigate(['admin']);
+    this.fileInputCloseModal.nativeElement.click();
+  }
+
+  goToOperations(){
+    this._router.navigate(['operations']);
+    this.fileInputCloseModal.nativeElement.click();
+  }
+
+  async login(){    
      this.spinner.show();
-     this._router.navigate(['/admin/dashboard']);
     let model = new UserLoginApiModel();
-    model.username = this.loginForm.get('username').value;
-    model.password = this.loginForm.get('password').value;
+    model.Username = this.loginForm.get('username').value;
+    model.Password = this.loginForm.get('password').value;
 
     await this._authService.login(model)
       .subscribe((data) => {
         if(data){
           this.spinner.hide();
-          this.userStore.user.identity = data.id;
-          this.userStore.user.email = data.email;
-          this.userStore.user.firstname = data.firstname;
-          this.userStore.user.lastname = data.lastname;
-          this.userStore.user.roles = data.roles;
+          this.userAccess.user.identity = data.id;
+          this.userAccess.user.email = data.email;
+          this.userAccess.user.firstname = data.firstname;
+          this.userAccess.user.lastname = data.lastname;
+          this.userAccess.user.roles = data.roles;
           this._authService.setSession(data);
           /**use the user role to determine
            * what page to navigate to
            */
-          let route:string = this.userStore.accessibleRoute(this.userStore.user.roles[0]);
-          this._router.navigate([route]);
+          let noOfRolesCheckResult = this.userAccess.isHasMoreThanOneRole(this.userAccess.user.roles);
+          if(noOfRolesCheckResult){
+            this.fileInputOpenModal.nativeElement.click();
+          }
+          else{
+            let route:string = this.userAccess.accessibleRoute(this.userAccess.user.roles[0]);
+            this._router.navigate([route]);
+          }          
         }
-      });
+      },
+      (err: HttpErrorResponse) => {
+        this.spinner.hide();
+        console.log("Error: " + err);
+        this.alertService.error("Oops! Login details are wrong. You need to remember them.");
+      }
+      );
     
-    // this._operationsService.getTodaysTransactions()
-    // .subscribe((data: QueueITTransaction[]) => {
+    this._operationsService.getTodaysTransactions()
+    .subscribe((data: QueueITTransaction[]) => {
       
-    // });
+    });
     
   }
 

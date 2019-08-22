@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { TransactionTypeStore } from '../../store/admin/transactiontypestore';
+import { TransactionTypeFacade } from '../../services/admin/transactiontypefacade';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TransactionType } from '../../domainmodel/transactiontype';
 import { GeneralService } from '../services/general.service';
@@ -18,9 +18,9 @@ export class TransactiontypeComponent implements OnInit {
   transactionTypeForm: FormGroup;
 
   p: number = 1;
-  collection: any[] = this.transactionTypeStore.transactiontypes;
+  collection: any[] = this.transactionTypeFacade.transactiontypes;
 
-  constructor(public transactionTypeStore: TransactionTypeStore, private _generalService: GeneralService,
+  constructor(public transactionTypeFacade: TransactionTypeFacade, private _generalService: GeneralService,
     private spinner: NgxSpinnerService) { 
     this.transactionTypeForm = new FormGroup({
       transactiontypename: new FormControl('', Validators.required)
@@ -32,7 +32,7 @@ export class TransactiontypeComponent implements OnInit {
     this._generalService.getTransactiontypes()
             .subscribe((data: TransactionType[]) => {
               this.spinner.hide();
-                this.transactionTypeStore.transactiontypes = data;
+                this.transactionTypeFacade.transactiontypes = data;
             },
             (err: HttpErrorResponse) => {
                 console.log("Error: " + err);
@@ -45,14 +45,14 @@ export class TransactiontypeComponent implements OnInit {
     this._generalService.addTransactionType(name)
         .subscribe((data: TransactionType) => {
           this.spinner.hide();
-            this.transactionTypeStore.transactiontypes = [...this.transactionTypeStore.transactiontypes, data];
+            this.transactionTypeFacade.transactiontypes = [...this.transactionTypeFacade.transactiontypes, data];
         });
   }
 
   editTransactionType(id: any){
-    this.transactionTypeStore.transactionType = this.transactionTypeStore.getTransactionType(id);
+    this.transactionTypeFacade.transactionType = this.transactionTypeFacade.getTransactionType(id);
     this.transactionTypeForm.setValue({
-       transactiontypename: this.transactionTypeStore.transactionType.name
+       transactiontypename: this.transactionTypeFacade.transactionType.name
     });
     this.buttonName = "Update TransactionType";
   }
@@ -60,12 +60,12 @@ export class TransactiontypeComponent implements OnInit {
   updateTransactionType(){
     this.spinner.show();
     let transactionType = new TransactionType();
-    transactionType.id = this.transactionTypeStore.transactionType.id;
+    transactionType.id = this.transactionTypeFacade.transactionType.id;
     transactionType.name = this.transactionTypeForm.get("transactiontypename").value;
     this._generalService.updateTransactiontype(transactionType)
       .subscribe((data: TransactionType) => {
         this.spinner.hide();
-        this.transactionTypeStore.updateTransactionType(data);
+        this.transactionTypeFacade.updateTransactionType(data);
       },
           (err: HttpErrorResponse) => {
               console.log("Error: " + err);

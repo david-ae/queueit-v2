@@ -1,15 +1,6 @@
 <!-- BreadCrumb -->
-<div *mobxAutorun class="row">
-        <ngx-spinner 
-        bdOpacity = 0.9
-        bdColor = "rgba(182,217,216,0.42)"
-        size = "medium"
-        color = "#48567c"
-        type = "ball-running-dots"
-        [fullScreen] = "true">
-    </ngx-spinner>    
-    <div class="col-lg-12">
-        <alert></alert>                  
+<div *mobxAutorun class="row"> 
+    <div class="col-lg-12">                
         <!-- Modal -->
         <form [formGroup]="assignToColleagueForm">
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -27,7 +18,7 @@
                         </p>
                         <select name="teller" formControlName="tellerid" class="form-control" required>
                             <option value="" disabled selected>--Select Colleague--</option>
-                            <option *ngFor="let seniorteller of tellerStore.getSeniorTellerList" [value]="seniorteller.identity">{{seniorteller.firstname}}&nbsp;&nbsp;{{seniorteller.lastname}}</option>
+                            <option *ngFor="let seniorteller of operationsFacade.getSeniorTellerList" [value]="seniorteller.identity">{{seniorteller.firstname}}&nbsp;&nbsp;{{seniorteller.lastname}}</option>
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -62,7 +53,7 @@
 </div>
 <div *mobxAutorun class="row">
     <div class="col-lg-12">
-        <div class="card mb-grid" *ngIf="transactionStore.getTransactionList.length !== 0; else transactionListBlock">
+        <div class="card mb-grid" *ngIf="operationsFacade.getTellerTransactions.length !== 0; else transactionListBlock">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div class="card-header-title">Transactions</div>
             </div>
@@ -77,11 +68,11 @@
                                 <th>Amount</th>                                                
                                 <th>Status</th>
                                 <th>As At</th>
-                                <th>TreatedBy</th>
+                                <th>Select a Teller to AssignTo</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let transaction of transactionStore.tellerTransactions | transaction: searchText | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;"  class="active">
+                            <tr *ngFor="let transaction of operationsFacade.tellerTransactions | transaction: searchText | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;"  class="active">
                                 <!-- <td>{{i + 1}}</td> -->
                                 <td>{{transaction.customerName.firstname}}&nbsp;&nbsp;{{transaction.customerName.lastname}}</td>
                                 <td>{{transaction.transactionType}}</td>
@@ -90,11 +81,19 @@
                                 <td>{{transaction.status}}</td>
                                 <td *ngIf="transaction.status == 'Submitted'">{{transaction.timeSubmitted | date:' h:mma'}}</td>
                                 <td *ngIf="transaction.status == 'Completed'">{{transaction.timeCompleted | date:' h:mma'}}</td>
+                                <td *ngIf="transaction.status == 'Processing'">{{transaction.datecreated | date:' h:mma'}}</td>
+                                <td *ngIf="transaction.status == 'Issue'" >
+                                    <em *ngFor="let time of transaction.timeIssueFlagged">
+                                            {{time | date:' h:mma'}}
+                                    </em>                                    
+                                </td>
                                 <td *ngIf="transaction.status == 'Rejected'">
                                     <table class="innertbl">
                                         <tbody>
-                                            <tr ng-repeat="time in transaction.timeRejected" style="word-wrap: break-word;">
-                                                <td>{{time | date:' h:mma'}}</td>
+                                            <tr *ngFor="let time of transaction.timeRejected" style="word-wrap: break-word;">
+                                                <td>
+                                                    <em>{{time | date:' h:mma'}}</em>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -102,17 +101,20 @@
                                 <td>
                                     <select class="form-control" formControlName="tellerid">
                                             <option value="" disabled selected>--Select Teller--</option>
-                                        <option *ngFor="let teller of tellerStore.getTellerList" [value]="teller.identity">{{teller.firstname}}&nbsp;&nbsp;{{teller.lastname}}</option>
+                                        <option *ngFor="let teller of operationsFacade.transactionalTellers" [value]="teller.identity">{{teller.firstname}}&nbsp;&nbsp;{{teller.lastname}}</option>
                                     </select>
                                 </td>
                                 <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Awaiting-Mail' ? true: false;">
-                                    <input type="button" class="btn btn-yellow" value="Flag Issue" (click)="markTransactionHasIssue(transaction.id)"/>
+                                    <input type="button" class="btn btn-outline-warning" value="Flag Issue" (click)="markTransactionHasIssue(transaction.id)"/>
                                 </td>
                                 <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Issue' ? true : transaction.status == 'Awaiting-Mail' ? true: false;">
-                                    <input type="button" class="btn btn-outline-info btn-warning" value="Assign" (click)="assignTransaction(transaction.id)" />
+                                    <input type="button" [disabled] = "!processTransactionForm.valid" class="btn btn-outline-info btn-yellow" value="Assign" (click)="assignTransaction(transaction.id)" />
                                 </td>
-                                <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Issue' ? true : trans.status == 'Awaiting-Mail' ? true: false;">
+                                <td *ngIf="transaction.status == 'Submitted' ? true : transaction.status == 'Issue' ? true : transaction.status == 'Awaiting-Mail' ? true: false;">
                                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalCenter" (click)="selectedTransaction(transaction.id)">Assign to Colleague</button>
+                                </td>
+                                <td *ngIf="transaction.status != 'Rejected' ? true : false">
+                                    <button type="button" class="btn btn-danger" (click)="rejectTransaction(transaction.id)">Reject</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -124,7 +126,7 @@
     <div class="col-md-12">
         <ng-template #transactionListBlock>
             <div class="card text-center mb-grid">
-                <h3><b><em>No transactions today</em></b></h3>
+                <h3><b><em>No transactions assigned to you yet.</em></b></h3>
             </div>
         </ng-template>   
     </div>          

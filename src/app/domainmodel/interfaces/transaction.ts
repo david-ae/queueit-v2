@@ -1,5 +1,5 @@
-import { CustomerVO } from "../valueobjects/customerVO";
-import { UserVO } from "../valueobjects/userVO";
+import { CustomerVO } from "../../valueobjects/customerVO";
+import { UserVO } from "../../valueobjects/userVO";
 
 export abstract class Transaction{
 	id: string;

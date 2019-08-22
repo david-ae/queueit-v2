@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Configuration } from 'src/app/config';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry, finalize } from 'rxjs/operators';
 import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { TransactionApiModel } from '../apimodels/transactionapimodel';
 
@@ -22,7 +22,7 @@ export class TransactionService {
 
   addTransaction(transaction: TransactionApiModel){
     return this._http.post<TransactionApiModel>(this._configuration.ServerOperationsWithApiUrl + "addtransaction", JSON.stringify(transaction), this.httpOptions)
-        .pipe(catchError(this.handleError));
+        .pipe(retry(2), catchError(this.handleError));
   }
 
   updateTransaction(transaction: QueueITTransaction){

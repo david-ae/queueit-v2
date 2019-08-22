@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { Configuration } from 'src/app/config';
 import { TransactionStore } from 'src/app/store/operations/transaction';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { delay, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -25,17 +25,17 @@ export class AuthService {
   }
 
   login(model: UserLoginApiModel){
-    return this._http.post(this._configuration.ApiAdminUrlAccount + "login", JSON.stringify(model), this.httpOptions)
+    return this._http.post<UserLoginApiModel>(this._configuration.ServerAdminWithApiAccountUrl + "login", JSON.stringify(model), this.httpOptions)
         .pipe(delay(100), catchError(this.handleError));
   }
 
   getNewUserProfile(email: string){
-    return this._http.post(this._configuration.ApiAdminUrlAccount + "getNewTellerProfile", JSON.stringify(email), this.httpOptions)
+    return this._http.post(this._configuration.ServerAdminWithApiAccountUrl + "getNewAccountProfile", JSON.stringify(email), this.httpOptions)
         .pipe(delay(100), catchError(this.handleError));
   }
 
   getUserOldAccount(email: string){
-    return this._http.post(this._configuration.ApiAdminUrlAccount + "getTellerUsingAccountByEmail", JSON.stringify(email), this.httpOptions)
+    return this._http.post(this._configuration.ServerAdminWithApiAccountUrl + "getUserUsingAccountByEmail", JSON.stringify(email), this.httpOptions)
         .pipe(delay(100), catchError(this.handleError));
   }
 

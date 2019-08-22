@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GeneralService } from '../services/general.service';
-import { UserStore } from 'src/app/store/admin/userstore';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserFacade } from 'src/app/services/admin/userfacade';
+import { UserVO } from 'src/app/valueobjects/userVO';
 import { ManageUserApiModel } from '../apimodels/manageuserapimodel';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RoleStore } from 'src/app/store/admin/rolestore';
+import { RoleFacade } from 'src/app/services/admin/rolefacade';
 import { Role } from 'src/app/domainmodel/role';
 import { AlertService } from 'src/app/shared/_services';
 
@@ -21,8 +21,8 @@ export class ManageuserprofileComponent implements OnInit {
   manageUserForm: FormGroup;
   isLoading: boolean = true;
 
-  constructor(private _generalService: GeneralService, public userStore: UserStore,
-     public roleStore: RoleStore, public alertService: AlertService) { 
+  constructor(private _generalService: GeneralService, public userFacade: UserFacade,
+     public roleFacade: RoleFacade, public alertService: AlertService) { 
     this.manageUserForm = new FormGroup({
       firstname: new FormControl('', Validators.required),
       lastname: new FormControl('', Validators.required),
@@ -36,11 +36,11 @@ export class ManageuserprofileComponent implements OnInit {
     this.alertService.success("Works");
     this._generalService.getUsers()
         .subscribe((data: UserVO[]) => {
-          this.userStore.users = data;
+          this.userFacade.users = data;
         });
       this._generalService.getRoles()
         .subscribe((data: Role[]) => {
-            this.roleStore.roles = data;
+            this.roleFacade.roles = data;
         },
         (err: HttpErrorResponse) => {
             console.log("Error: " + err);
@@ -59,14 +59,14 @@ export class ManageuserprofileComponent implements OnInit {
     this._generalService.register(model)
         .subscribe((data) => {
           if(data){
-            this.userStore.user.identity = data.id;
-            this.userStore.user.email = data.email;
-            this.userStore.user.firstname = data.firstname;
-            this.userStore.user.lastname = data.lastname;
-            this.userStore.user.isActive = data.isactive;
-            this.userStore.users.push(this.userStore.user);
+            this.userFacade.user.identity = data.id;
+            this.userFacade.user.email = data.email;
+            this.userFacade.user.firstname = data.firstname;
+            this.userFacade.user.lastname = data.lastname;
+            this.userFacade.user.isActive = data.isactive;
+            this.userFacade.users.push(this.userFacade.user);
 
-            this.alertService.success(this.userStore.user.firstname + " " + this.userStore.user.lastname + " was successfully registered.")
+            this.alertService.success(this.userFacade.user.firstname + " " + this.userFacade.user.lastname + " was successfully registered.")
           }  
         },
         (err: HttpErrorResponse) => {
@@ -77,13 +77,13 @@ export class ManageuserprofileComponent implements OnInit {
   }
 
   editUser(id: any){
-    this.userStore.user = this.userStore.getUser(id);
+    this.userFacade.user = this.userFacade.getUser(id);
     this.manageUserForm.setValue({
-       firstname: this.userStore.user.firstname,
-       lastname: this.userStore.user.lastname,
-       email: this.userStore.user.email,
-       id: this.userStore.user.identity,
-       isactive: this.userStore.user.isActive
+       firstname: this.userFacade.user.firstname,
+       lastname: this.userFacade.user.lastname,
+       email: this.userFacade.user.email,
+       id: this.userFacade.user.identity,
+       isactive: this.userFacade.user.isActive
     });
     this.buttonName = "Update User";
   }
@@ -91,10 +91,10 @@ export class ManageuserprofileComponent implements OnInit {
   deactivateUser(id: string){
     this._generalService.deactivateUser(id)
         .subscribe(() => {          
-          let user = this.userStore.getUser(id);
-          this.userStore.updateUser(user);                    
-          this.userStore.error = "works";
-          this.alertService.success(this.userStore.error);
+          let user = this.userFacade.getUser(id);
+          this.userFacade.updateUser(user);                    
+          this.userFacade.error = "works";
+          this.alertService.success(this.userFacade.error);
         },
         (err: HttpErrorResponse) => {
           console.log("Error: " + err);
@@ -107,8 +107,8 @@ export class ManageuserprofileComponent implements OnInit {
     this._generalService.reactivateUser(id)
         .subscribe(() => {
           this.alertService.success("User Successfully Reactivated");
-          let user = this.userStore.getUser(id);
-          this.userStore.updateUser(user);
+          let user = this.userFacade.getUser(id);
+          this.userFacade.updateUser(user);
         },
         (err: HttpErrorResponse) => {
           console.log("Error: " + err);
@@ -126,7 +126,7 @@ export class ManageuserprofileComponent implements OnInit {
     model.id = this.manageUserForm.get("id").value;
     this._generalService.updateUser(model)
         .subscribe(()=> {
-          this.userStore.updateUser(this.userStore.user);
+          this.userFacade.updateUser(this.userFacade.user);
         },
         (err: HttpErrorResponse) => {
           console.log("Error: " + err);

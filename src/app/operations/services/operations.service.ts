@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Configuration } from 'src/app/config';
 import { catchError, delay } from 'rxjs/operators';
 import { TransactionType } from 'src/app/domainmodel/transactiontype';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
-import { Accounts } from 'src/app/domainmodel/valueobjects/accountvo';
+import { UserVO } from 'src/app/valueobjects/userVO';
+import { Accounts } from 'src/app/valueobjects/accountvo';
 import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
 import { TransactionStore } from 'src/app/store/operations/transaction';
 

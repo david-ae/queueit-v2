@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService } from '../services/general.service';
 import { Role } from 'src/app/domainmodel/role';
-import { RoleStore } from 'src/app/store/admin/rolestore';
+import { RoleFacade } from 'src/app/services/admin/rolefacade';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ManageUserRoleApiModel } from "../apimodels/manageuserroleapimodel";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserStore } from 'src/app/store/admin/userstore';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserFacade } from 'src/app/services/admin/userfacade';
+import { UserVO } from 'src/app/valueobjects/userVO';
 
 @Component({
   selector: 'app-manageuserrole',
@@ -18,8 +18,8 @@ export class ManageuserroleComponent implements OnInit {
 
   manageUserRoleForm: FormGroup;
 
-  constructor(private _generalService: GeneralService, public roleStore: RoleStore,
-    private spinner: NgxSpinnerService, public userStore: UserStore) { 
+  constructor(private _generalService: GeneralService, public roleFacade: RoleFacade,
+    private spinner: NgxSpinnerService, public userFacade: UserFacade) { 
     this.manageUserRoleForm = new FormGroup({
       email: new FormControl('', Validators.required),
       roleid: new FormControl('', Validators.required),
@@ -31,12 +31,12 @@ export class ManageuserroleComponent implements OnInit {
     this.spinner.show();
     this._generalService.getUsers()
         .subscribe((data: UserVO[]) => {
-          this.userStore.users = data;
+          this.userFacade.users = data;
         });
     this._generalService.getRoles()
           .subscribe((data: Role[]) => {
             this.spinner.hide();
-              this.roleStore.roles = data;
+              this.roleFacade.roles = data;
           },
           (err: HttpErrorResponse) => {
               console.log("Error: " + err);
@@ -45,11 +45,11 @@ export class ManageuserroleComponent implements OnInit {
   }
 
   editUser(id: any){
-    this.userStore.user = this.userStore.getUser(id);
+    this.userFacade.user = this.userFacade.getUser(id);
     this.manageUserRoleForm.setValue({
        //roleid: this.,
-       email: this.userStore.user.email,
-       id: this.userStore.user.identity
+       email: this.userFacade.user.email,
+       id: this.userFacade.user.identity
     });
   }
 

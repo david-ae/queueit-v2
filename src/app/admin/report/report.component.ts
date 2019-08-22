@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DateRangeApiModel } from '../apimodels/daterangeapimodel';
 import { GeneralService } from '../services/general.service';
 import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
-import { ReportStore } from 'src/app/store/admin/reportstore';
+import { ReportFacade } from 'src/app/services/admin/reportsfacade';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -20,9 +20,9 @@ export class ReportComponent implements OnInit {
   search: boolean;
 
   p: number = 1;
-  collection: any[] = this.reportStore.transactionsInRange;
+  collection: any[] = this.reportFacade.transactionsInRange;
 
-  constructor(private _generalService: GeneralService, public reportStore: ReportStore,
+  constructor(private _generalService: GeneralService, public reportFacade: ReportFacade,
     private spinner: NgxSpinnerService) { 
     this.reportForm = new FormGroup({
       dateFrom: new FormControl('', Validators.required),
@@ -31,7 +31,7 @@ export class ReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.reportStore.clearTransactionsInRange();
+    this.reportFacade.clearTransactionsInRange();
   }
 
   retrieveReportInRange(){    
@@ -49,15 +49,15 @@ export class ReportComponent implements OnInit {
           if(data){
             this.spinner.hide();
             this.search = true;
-            this.reportStore.transactionsInRange = data;
-            this.reportStore.sortCompletedTransactions(this.reportStore.transactionsInRange);
-            this.reportStore.sortSubmittedTransactions(this.reportStore.transactionsInRange);
-            this.reportStore.sortReturnedTransactions(this.reportStore.transactionsInRange);
+            this.reportFacade.transactionsInRange = data;
+            this.reportFacade.sortCompletedTransactions(this.reportFacade.transactionsInRange);
+            this.reportFacade.sortSubmittedTransactions(this.reportFacade.transactionsInRange);
+            this.reportFacade.sortReturnedTransactions(this.reportFacade.transactionsInRange);
             
             return;
           }         
         });
-    this.reportStore.transactionsInRange = [];
+    this.reportFacade.transactionsInRange = [];
     this.displayDateFrom = this.reportForm.get("dateFrom").value;
     this.displayDateTo = this.reportForm.get("dateTo").value;
   }

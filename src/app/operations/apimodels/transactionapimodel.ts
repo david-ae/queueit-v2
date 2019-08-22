@@ -1,5 +1,5 @@
-import { CustomerVO } from 'src/app/domainmodel/valueobjects/customerVO';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { CustomerVO } from 'src/app/valueobjects/customerVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 
 export class TransactionApiModel{
     customerName: CustomerVO;

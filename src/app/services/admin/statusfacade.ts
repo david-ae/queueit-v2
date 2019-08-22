@@ -6,13 +6,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Status } from '../../domainmodel/status';
 
 @Injectable()
-export class StatusStore{
-    @observable statusList: Status[] = [];
-    @observable status: Status = new Status();
+export class StatusFacade{
+    @observable statusList: Status[];
+    @observable status: Status;
 
-    constructor(){
+    constructor(private _generalService: GeneralService){
+        this.statusList = [];
+        this.status = new Status();
         autorun(() => {
-            
+            this._generalService.getStatusList()
+                .subscribe((data: Status[]) => {
+                    this.statusList = data;
+                });
         });
     }
 

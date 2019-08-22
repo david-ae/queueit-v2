@@ -4,7 +4,7 @@ import { ContainerComponent } from './container/container.component';
 import { LoginComponent } from './login/login.component';
 import { routing } from './authentication.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserStore } from '../store/authentication/userstore';
+import { UserAccess } from '../services/authentication/usersAccess';
 import { GetnewuserprofileComponent } from './getnewuserprofile/getnewuserprofile.component';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
@@ -19,6 +19,6 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule,
     routing
   ],
-  providers: [UserStore, NgxSpinnerService]
+  providers: [UserAccess, NgxSpinnerService]
 })
 export class AuthenticationModule { }

@@ -1,5 +1,5 @@
 import { Transaction } from "./interfaces/transaction";
-import { UserVO } from "./valueobjects/userVO";
+import { UserVO } from "../valueobjects/userVO";
 import { Outlet } from "./interfaces/outlet";
 
 export class QueueITTransaction extends Transaction{
@@ -11,7 +11,7 @@ export class QueueITTransaction extends Transaction{
     flaggedIssueBy: UserVO[];
 	rejectedBy: UserVO[];
 	completedBy: UserVO;
-	returnedBy: UserVO;
+	returnedBy: UserVO[];
 	treatedBy: UserVO[];
 	status: string;
 	outletName: string;
@@ -23,5 +23,6 @@ export class QueueITTransaction extends Transaction{
 		this.flaggedIssueBy = [];
 		this.rejectedBy = [];
 		this.treatedBy = [];
+		this.returnedBy = [];
 	}
 }

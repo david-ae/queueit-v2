@@ -1,22 +1,24 @@
-import { Accounts } from './../../domainmodel/valueobjects/accountvo';
+import { Accounts } from '../../valueobjects/accountvo';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { QueueITTransaction } from 'src/app/domainmodel/queueittransaction';
-import { CustomerVO } from 'src/app/domainmodel/valueobjects/customerVO';
+import { CustomerVO } from 'src/app/valueobjects/customerVO';
 import { TransactionService } from '../services/transaction.service';
 import { Transaction } from 'src/app/domainmodel/interfaces/transaction';
-import { TransactionStore } from 'src/app/store/operations/transaction';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { UserVO } from 'src/app/domainmodel/valueobjects/userVO';
+import { UserVO } from 'src/app/valueobjects/userVO';
 import { OutletImp } from 'src/app/domainmodel/outletimp';
-import { TellerService } from '../services/teller.service';
 import { TransactionApiModel } from '../apimodels/transactionapimodel';
 import { OperationsService } from '../services/operations.service';
 import { TransactionType } from 'src/app/domainmodel/transactiontype';
-import { TransactionTypeStore } from 'src/app/store/admin/transactiontypestore';
-import { TellerStore } from 'src/app/store/operations/teller';
+import { TransactionTypeFacade } from 'src/app/services/admin/transactiontypefacade';
 import { Configuration } from 'src/app/config';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { OperationsFacade } from 'src/app/services/operations/operationsfacade';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import { AlertService } from 'src/app/shared/_services';
+import { UserAccess } from 'src/app/services/authentication/usersAccess';
 
 export class Item{
   name:string;
@@ -31,7 +33,11 @@ export const ITEMS: Item[] = [
    {
        name:'Processing',
        value:'Processing'
-    }
+    },
+    {
+      name:'Awaiting Mail',
+      value:'Awaiting-Mail'
+   }
 ];
 
 @Component({
@@ -53,12 +59,12 @@ export class JobComponent implements OnInit {
   private _hubConnection: HubConnection;
 
   p: number = 1;
-  collection: any[] = this.transactionStore.transactions;
+  collection: any[] = this.operationsFacade.transactions;
   
   constructor(private _transactionService: TransactionService, private _operationsService: OperationsService,
-    public transactionStore: TransactionStore, public transactionTypeStore: TransactionTypeStore,
-    public tellerStore: TellerStore, private _configuration: Configuration,
-    private spinner: NgxSpinnerService) { 
+    public transactionTypeFacade: TransactionTypeFacade, private _configuration: Configuration, 
+    public operationsFacade: OperationsFacade, public alertService: AlertService,
+    private spinner: NgxSpinnerService, private userAccess: UserAccess) { 
     this.transactionForm = new FormGroup({
       firstname: new FormControl('', Validators.required),
       lastname: new FormControl('', Validators.required),
@@ -75,10 +81,10 @@ export class JobComponent implements OnInit {
 
   startSignalRConnection(){
     let builder = new HubConnectionBuilder();
-    this._hubConnection = builder.withUrl(this._configuration.ApiServer + 'transactions').build();
+    this._hubConnection = builder.withUrl(this._configuration.ApiServerSSL + 'transactions').build();
 
     this._hubConnection.on('GetTodayTransactions', data => {
-      this.transactionStore.transactions = data;
+      this.operationsFacade.transactions = data;
     });
 
     this._hubConnection.start().then(() => console.log("connected"));
@@ -86,17 +92,6 @@ export class JobComponent implements OnInit {
 
   ngOnInit() {        
     this.spinner.show();
-    //load up transaction types
-    this._operationsService.getTransactiontypes()
-        .subscribe((data: TransactionType[]) => {
-            this.transactionTypeStore.transactiontypes = data;
-        });
-
-        //load up senior tellers
-    this._operationsService.getSeniorTellers()
-        .subscribe((data: Accounts[]) => {
-          this.tellerStore.seniortellers = data;
-        });
     //invoke signalr
       this._operationsService.getTodaysTransactions()
     .subscribe(() => {
@@ -125,45 +120,46 @@ export class JobComponent implements OnInit {
     agent.firstname = firstname;
     agent.lastname = lastname;
 
-    let user = new UserVO();
-    user.firstname = "ADEMOLA";
-    user.lastname = "RASAQ";
-    user.identity = "58049c07b58d61601c304b77";
-    user.email = "adeyemi.fanaike@yahoo.com";
-    user.roles.push("TELLER");
-
     transaction.customerName = agent;
     transaction.platenumber = this.transactionForm.get("registrationnumber").value;
     transaction.status = this.transactionForm.get("status").value;
     transaction.transactionType = this.transactionForm.get("transactiontype").value;
     transaction.amount = this.transactionForm.get("amount").value;
-    transaction.createdBy = user;
+    transaction.createdBy = this.userAccess.user;
     transaction.treatedBy = this.transactionForm.get("tellerid").value;
     transaction.timeSubmitted = new Date();
     transaction.outletName = "Courteville";
     transaction.allocatedTime = "10";
 
-    this._transactionService.addTransaction(transaction).subscribe((data: QueueITTransaction) =>{
-      this.spinner.hide();
-      this.transactionForm.reset();
-    });    
+    this._transactionService.addTransaction(transaction)
+      .subscribe (() =>{
+        this.spinner.hide();
+      this.transactionForm.reset({tellerid: 0, transactiontype: 0});      
+      // this.alertService.success("New Transaction Added.");
+    },
+      (err: HttpErrorResponse) => {
+        this.spinner.hide();
+          console.log("Error: " + err);
+          this.alertService.error("Unable to Add New Transaction. Please try again.")
+      }
+    );    
   }
 
   editTransaction(id: string){    
-    this.transactionStore.transaction = this.transactionStore.getTransaction(id);
+    this.operationsFacade.transaction = this.operationsFacade.getTransaction(id);
     
     this.transactionForm.setValue({
-      firstname: this.transactionStore.transaction.customerName.firstname,
-      lastname: this.transactionStore.transaction.customerName.lastname,
-      transactiontype: this.transactionStore.transaction.transactionType,
-      registrationnumber: this.transactionStore.transaction.platenumber,
-      amount: this.transactionStore.transaction.amount,
-      tellerid: this.transactionStore.transaction.treatedBy[0].identity,
-      status: this.transactionStore.transaction.status
+      firstname: this.operationsFacade.transaction.customerName.firstname,
+      lastname: this.operationsFacade.transaction.customerName.lastname,
+      transactiontype: this.operationsFacade.transaction.transactionType,
+      registrationnumber: this.operationsFacade.transaction.platenumber,
+      amount: this.operationsFacade.transaction.amount,
+      tellerid: this.operationsFacade.transaction.treatedBy[0].identity,
+      status: this.operationsFacade.transaction.status
     });
-    this.transactionStore.transaction.treatedBy = [];
-    this.transactionStore.transaction.completedBy = null;
-    this.transactionStore.transaction.returnedBy = null;
+    this.operationsFacade.transaction.treatedBy = [];
+    this.operationsFacade.transaction.completedBy = null;
+    this.operationsFacade.transaction.returnedBy = null;
     this.buttonName = "Update Transaction";
   }
 
@@ -176,21 +172,29 @@ export class JobComponent implements OnInit {
     agent.firstname = firstname;
     agent.lastname = lastname;
 
-    this.transactionStore.transaction.customerName = agent;
-    this.transactionStore.transaction.platenumber = this.transactionForm.get("registrationnumber").value;
-    this.transactionStore.transaction.status = this.transactionForm.get("status").value;
-    this.transactionStore.transaction.transactionType = this.transactionForm.get("transactiontype").value;
-    this.transactionStore.transaction.amount = this.transactionForm.get("amount").value;
+    this.operationsFacade.transaction.customerName = agent;
+    this.operationsFacade.transaction.platenumber = this.transactionForm.get("registrationnumber").value;
+    this.operationsFacade.transaction.status = this.transactionForm.get("status").value;
+    this.operationsFacade.transaction.transactionType = this.transactionForm.get("transactiontype").value;
+    this.operationsFacade.transaction.amount = this.transactionForm.get("amount").value;
 
     let tellerid: string = this.transactionForm.get("tellerid").value;
-    let teller = this.tellerStore.getTellerById(tellerid);
+    let teller = this.operationsFacade.getTellerById(tellerid);
     let tellerUserVo = this.turnToUserVO(teller);
-    this.transactionStore.transaction.treatedBy.push(tellerUserVo); 
-    this._transactionService.updateTransaction(this.transactionStore.transaction)
+    this.operationsFacade.transaction.treatedBy.push(tellerUserVo); 
+    this._transactionService.updateTransaction(this.operationsFacade.transaction)
         .subscribe(() => {
           this.spinner.hide();
-          this.transactionForm.reset();          
-        });
+          this.transactionForm.reset({tellerid: 0, transactiontype: 0});          
+          this.alertService.success("Transaction Updated.");
+        },
+        (err: HttpErrorResponse) => {
+          this.spinner.hide();
+            console.log("Error: " + err);
+            this.alertService.error("Transaction Update Failed. Please try again")
+        }
+      );
+      this.buttonName = "Add Transaction";
   }
 
   turnToUserVO(user: Accounts): UserVO{

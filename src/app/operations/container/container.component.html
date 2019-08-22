@@ -14,12 +14,17 @@
     
             <ul class="navbar-nav d-flex justify-content-end mr-2">
                 <!-- Notificatoins -->
-                <li class="nav-item d-flex align-items-center mr-2">
+                <li *ngIf="userAccess.isSeniorTeller" class="nav-item d-flex align-items-center mr-2">
+                    <a [routerLink]="['/operations/process-transactions']" class="btn btn-sm btn-secondary">
+                        Process Transactions
+                    </a>
+                </li>
+                <li *ngIf="userAccess.isTransactionalTeller || userAccess.isTeller" class="nav-item d-flex align-items-center mr-2">
                     <a [routerLink]="['/operations/process-jobs']" class="btn btn-sm btn-secondary">
                         Process Jobs
                     </a>
                 </li>
-                <li class="nav-item d-flex align-items-center mr-2">
+                <li *ngIf="userAccess.isTransactionalTeller || userAccess.isTeller"  class="nav-item d-flex align-items-center mr-2">
                     <a [routerLink]="['/operations/checkout-jobs']" class="btn btn-sm btn-labeled-right btn-success">
                         <span class="btn-label">
                           <span class="oi oi-arrow-thick-right" aria-hidden="true"></span>
@@ -35,7 +40,7 @@
                     <img src="./../../../assets/images/user2.png" class="d-inline-block align-top" alt="">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item text-danger" [routerLink]="['/auth/login']" href="#">Sign out</a>
+                    <a class="dropdown-item text-danger" [routerLink]="['/auth/login']" href="#">Log Out</a>
                 </div>
                 </li>
             </ul>
@@ -44,6 +49,15 @@
         <div class="adminx-content">
             <div class="adminx-main-content">
                 <div class="container-fluid">
+                    <ngx-spinner 
+                        bdOpacity = 0.9
+                        bdColor = "rgba(182,217,216,0.42)"
+                        size = "medium"
+                        color = "#48567c"
+                        type = "ball-running-dots"
+                        [fullScreen] = "true">
+                    </ngx-spinner> 
+                    <alert></alert>
                     <router-outlet></router-outlet>    
                 </div>
             </div>

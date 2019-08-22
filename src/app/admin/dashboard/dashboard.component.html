@@ -21,7 +21,7 @@
                     <div class="card-body">
                     <div class="card-info-title">Total Submitted</div>
                     <h3 class="card-title mb-0">
-                        {{reportStore.getSubmittedTransactions}}
+                        {{reportFacade.getSubmittedTransactions}}
                     </h3>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <div class="card-body">
                     <div class="card-info-title">Total Processing</div>
                     <h3 class="card-title mb-0">
-                        {{reportStore.getTransactionsBeingProcessed}}
+                        {{reportFacade.getTransactionsBeingProcessed}}
                     </h3>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                     <div class="card-body">
                     <div class="card-info-title">Total Awaiting Mail</div>
                     <h3 class="card-title mb-0">
-                        {{reportStore.getTransactionsAwaitingMail}}
+                        {{reportFacade.getTransactionsAwaitingMail}}
                     </h3>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <div class="card-body">
                     <div class="card-info-title">Total Rejected</div>
                     <h3 class="card-title mb-0">
-                        {{reportStore.getRejectedTransactions}}
+                        {{reportFacade.getRejectedTransactions}}
                     </h3>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                 <div class="card-body">
                 <div class="card-info-title">Total Completed</div>
                 <h3 class="card-title mb-0">
-                    {{reportStore.getCompletedTransactions}}
+                    {{reportFacade.getCompletedTransactions}}
                 </h3>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     <div class="card-body">
                     <div class="card-info-title">Total Returned</div>
                     <h3 class="card-title mb-0">
-                        {{reportStore.getReturnedTransactions}}
+                        {{reportFacade.getReturnedTransactions}}
                     </h3>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                         </a>
                     </nav>
                 </div>
-                <div *ngIf="reportStore.reportSystem.Tellers.length != 0; else transactionActivityReportElseBlock"  class="card-body collapse show" id="card1">
+                <div *ngIf="reportFacade.reportSystem.Tellers.length != 0; else transactionActivityReportElseBlock"  class="card-body collapse show" id="card1">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div class="card-header-title">{{transactionStatus}}&nbsp;&nbsp;Transactions</div>
                         <button class="btn btn-primary" (click)="tellerSubmittedTransaction()" >Submitted</button>
@@ -172,7 +172,7 @@
                         </a>
                     </nav>
                 </div>
-                <div *ngIf="reportStore.getTransactionsInRange.length != 0; else transactionAnalysisElseBlock" class="card-body collapse show" id="card2">
+                <div *ngIf="reportFacade.getTransactionsInRange.length != 0; else transactionAnalysisElseBlock" class="card-body collapse show" id="card2">
                     <form [formGroup]="quickViewForm">
                         <div class="input-group"> 
                             <button class="btn btn-outline-info calendar" (click)="dTo.toggle()" type="button">Select a Date</button>
